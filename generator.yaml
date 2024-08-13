@@ -1,0 +1,26 @@
+ignore:
+  resource_names:
+      - Blueprint
+      - Classifier
+      - Connection
+      - Crawler
+      - CustomEntityType
+      - DataQualityRuleset
+      - Database
+      - DevEndpoint
+      - Job
+      - MLTransform
+      - Partition
+      - PartitionIndex
+      - Registry
+      - Schema
+      - Script
+      - SecurityConfiguration
+      - Session
+      - Table
+      - TableOptimizer
+      - Trigger
+      - UsageProfile
+      - UserDefinedFunction
+      - Workflow
+model_name: glue
