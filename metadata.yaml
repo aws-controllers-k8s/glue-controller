@@ -1,0 +1,8 @@
+service:
+  full_name: AWS Glue
+  short_name: Glue
+  link: https://aws.amazon.com/glue/
+  documentation: https://docs.aws.amazon.com/glue/
+api_versions:
+  - api_version: v1alpha1
+    status: available
