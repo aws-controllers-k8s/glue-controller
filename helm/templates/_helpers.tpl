@@ -55,6 +55,7 @@ rules:
   - ""
   resources:
   - configmaps
+  - secrets
   verbs:
   - get
   - list
@@ -69,18 +70,9 @@ rules:
   - list
   - watch
 - apiGroups:
-  - ""
+  - glue.services.k8s.aws
   resources:
-  - secrets
-  verbs:
-  - get
-  - list
-  - patch
-  - watch
-- apiGroups:
-  - services.k8s.aws
-  resources:
-  - adoptedresources
+  - jobs
   verbs:
   - create
   - delete
@@ -90,16 +82,25 @@ rules:
   - update
   - watch
 - apiGroups:
-  - services.k8s.aws
+  - glue.services.k8s.aws
   resources:
-  - adoptedresources/status
+  - jobs/status
   verbs:
   - get
   - patch
   - update
 - apiGroups:
+  - iam.services.k8s.aws
+  resources:
+  - roles
+  - roles/status
+  verbs:
+  - get
+  - list
+- apiGroups:
   - services.k8s.aws
   resources:
+  - adoptedresources
   - fieldexports
   verbs:
   - create
@@ -112,6 +113,7 @@ rules:
 - apiGroups:
   - services.k8s.aws
   resources:
+  - adoptedresources/status
   - fieldexports/status
   verbs:
   - get

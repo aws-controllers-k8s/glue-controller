@@ -27,3 +27,2144 @@ var (
 	_ = &aws.JSONValue{}
 	_ = ackv1alpha1.AWSAccountID("")
 )
+
+// Defines an action to be initiated by a trigger.
+type Action struct {
+	Arguments   map[string]*string `json:"arguments,omitempty"`
+	CrawlerName *string            `json:"crawlerName,omitempty"`
+	JobName     *string            `json:"jobName,omitempty"`
+	// Specifies configuration properties of a notification.
+	NotificationProperty  *NotificationProperty `json:"notificationProperty,omitempty"`
+	SecurityConfiguration *string               `json:"securityConfiguration,omitempty"`
+	Timeout               *int64                `json:"timeout,omitempty"`
+}
+
+// Specifies a transform that groups rows by chosen fields and computes the
+// aggregated value by specified function.
+type Aggregate struct {
+	Aggs   []*AggregateOperation `json:"aggs,omitempty"`
+	Groups [][]*string           `json:"groups,omitempty"`
+	Inputs []*string             `json:"inputs,omitempty"`
+	Name   *string               `json:"name,omitempty"`
+}
+
+// Specifies the set of parameters needed to perform aggregation in the aggregate
+// transform.
+type AggregateOperation struct {
+	AggFunc *string   `json:"aggFunc,omitempty"`
+	Column  []*string `json:"column,omitempty"`
+}
+
+// Specifies an optional value when connecting to the Redshift cluster.
+type AmazonRedshiftAdvancedOption struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+// Specifies an Amazon Redshift node.
+type AmazonRedshiftNodeData struct {
+	AccessType      *string                         `json:"accessType,omitempty"`
+	Action          *string                         `json:"action,omitempty"`
+	AdvancedOptions []*AmazonRedshiftAdvancedOption `json:"advancedOptions,omitempty"`
+	// Specifies an option value.
+	CatalogDatabase       *Option `json:"catalogDatabase,omitempty"`
+	CatalogRedshiftSchema *string `json:"catalogRedshiftSchema,omitempty"`
+	CatalogRedshiftTable  *string `json:"catalogRedshiftTable,omitempty"`
+	// Specifies an option value.
+	CatalogTable *Option `json:"catalogTable,omitempty"`
+	// Specifies an option value.
+	Connection        *Option `json:"connection,omitempty"`
+	CrawlerConnection *string `json:"crawlerConnection,omitempty"`
+	// Specifies an option value.
+	IAMRole             *Option `json:"iamRole,omitempty"`
+	MergeAction         *string `json:"mergeAction,omitempty"`
+	MergeClause         *string `json:"mergeClause,omitempty"`
+	MergeWhenMatched    *string `json:"mergeWhenMatched,omitempty"`
+	MergeWhenNotMatched *string `json:"mergeWhenNotMatched,omitempty"`
+	PostAction          *string `json:"postAction,omitempty"`
+	PreAction           *string `json:"preAction,omitempty"`
+	SampleQuery         *string `json:"sampleQuery,omitempty"`
+	// Specifies an option value.
+	Schema          *Option   `json:"schema,omitempty"`
+	SelectedColumns []*Option `json:"selectedColumns,omitempty"`
+	SourceType      *string   `json:"sourceType,omitempty"`
+	StagingTable    *string   `json:"stagingTable,omitempty"`
+	// Specifies an option value.
+	Table       *Option   `json:"table,omitempty"`
+	TablePrefix *string   `json:"tablePrefix,omitempty"`
+	TableSchema []*Option `json:"tableSchema,omitempty"`
+	TempDir     *string   `json:"tempDir,omitempty"`
+	Upsert      *bool     `json:"upsert,omitempty"`
+}
+
+// Specifies an Amazon Redshift source.
+type AmazonRedshiftSource struct {
+	// Specifies an Amazon Redshift node.
+	Data *AmazonRedshiftNodeData `json:"data,omitempty"`
+	Name *string                 `json:"name,omitempty"`
+}
+
+// Specifies an Amazon Redshift target.
+type AmazonRedshiftTarget struct {
+	// Specifies an Amazon Redshift node.
+	Data   *AmazonRedshiftNodeData `json:"data,omitempty"`
+	Inputs []*string               `json:"inputs,omitempty"`
+	Name   *string                 `json:"name,omitempty"`
+}
+
+// A failed annotation.
+type AnnotationError struct {
+	FailureReason *string `json:"failureReason,omitempty"`
+}
+
+// Specifies a transform that maps data property keys in the data source to
+// data property keys in the data target. You can rename keys, modify the data
+// types for keys, and choose which keys to drop from the dataset.
+type ApplyMapping struct {
+	Inputs  []*string  `json:"inputs,omitempty"`
+	Mapping []*Mapping `json:"mapping,omitempty"`
+	Name    *string    `json:"name,omitempty"`
+}
+
+// Specifies a connector to an Amazon Athena data source.
+type AthenaConnectorSource struct {
+	ConnectionName  *string       `json:"connectionName,omitempty"`
+	ConnectionTable *string       `json:"connectionTable,omitempty"`
+	ConnectionType  *string       `json:"connectionType,omitempty"`
+	ConnectorName   *string       `json:"connectorName,omitempty"`
+	Name            *string       `json:"name,omitempty"`
+	OutputSchemas   []*GlueSchema `json:"outputSchemas,omitempty"`
+	SchemaName      *string       `json:"schemaName,omitempty"`
+}
+
+// A structure containing the Lake Formation audit context.
+type AuditContext struct {
+	AllColumnsRequested *bool `json:"allColumnsRequested,omitempty"`
+}
+
+// Specifies a target that uses a Glue Data Catalog table.
+type BasicCatalogTarget struct {
+	Database      *string     `json:"database,omitempty"`
+	Inputs        []*string   `json:"inputs,omitempty"`
+	Name          *string     `json:"name,omitempty"`
+	PartitionKeys [][]*string `json:"partitionKeys,omitempty"`
+	Table         *string     `json:"table,omitempty"`
+}
+
+// Records an error that occurred when attempting to stop a specified job run.
+type BatchStopJobRunError struct {
+	JobName *string `json:"jobName,omitempty"`
+}
+
+// Records a successful request to stop a specified JobRun.
+type BatchStopJobRunSuccessfulSubmission struct {
+	JobName *string `json:"jobName,omitempty"`
+}
+
+// The details of a blueprint.
+type Blueprint struct {
+	BlueprintLocation        *string      `json:"blueprintLocation,omitempty"`
+	BlueprintServiceLocation *string      `json:"blueprintServiceLocation,omitempty"`
+	CreatedOn                *metav1.Time `json:"createdOn,omitempty"`
+	Description              *string      `json:"description,omitempty"`
+	LastModifiedOn           *metav1.Time `json:"lastModifiedOn,omitempty"`
+}
+
+// The details of a blueprint run.
+type BlueprintRun struct {
+	CompletedOn  *metav1.Time `json:"completedOn,omitempty"`
+	StartedOn    *metav1.Time `json:"startedOn,omitempty"`
+	WorkflowName *string      `json:"workflowName,omitempty"`
+}
+
+// Specifies a Delta Lake data source that is registered in the Glue Data Catalog.
+type CatalogDeltaSource struct {
+	AdditionalDeltaOptions map[string]*string `json:"additionalDeltaOptions,omitempty"`
+	Database               *string            `json:"database,omitempty"`
+	Name                   *string            `json:"name,omitempty"`
+	OutputSchemas          []*GlueSchema      `json:"outputSchemas,omitempty"`
+	Table                  *string            `json:"table,omitempty"`
+}
+
+// Specifies a table definition in the Glue Data Catalog.
+type CatalogEntry struct {
+	DatabaseName *string `json:"databaseName,omitempty"`
+	TableName    *string `json:"tableName,omitempty"`
+}
+
+// Specifies a Hudi data source that is registered in the Glue Data Catalog.
+type CatalogHudiSource struct {
+	AdditionalHudiOptions map[string]*string `json:"additionalHudiOptions,omitempty"`
+	Database              *string            `json:"database,omitempty"`
+	Name                  *string            `json:"name,omitempty"`
+	OutputSchemas         []*GlueSchema      `json:"outputSchemas,omitempty"`
+	Table                 *string            `json:"table,omitempty"`
+}
+
+// A structure containing migration status information.
+type CatalogImportStatus struct {
+	ImportedBy *string `json:"importedBy,omitempty"`
+}
+
+// Specifies an Apache Kafka data store in the Data Catalog.
+type CatalogKafkaSource struct {
+	// Specifies options related to data preview for viewing a sample of your data.
+	DataPreviewOptions *StreamingDataPreviewOptions `json:"dataPreviewOptions,omitempty"`
+	Database           *string                      `json:"database,omitempty"`
+	DetectSchema       *bool                        `json:"detectSchema,omitempty"`
+	Name               *string                      `json:"name,omitempty"`
+	// Additional options for streaming.
+	StreamingOptions *KafkaStreamingSourceOptions `json:"streamingOptions,omitempty"`
+	Table            *string                      `json:"table,omitempty"`
+	WindowSize       *int64                       `json:"windowSize,omitempty"`
+}
+
+// Specifies a Kinesis data source in the Glue Data Catalog.
+type CatalogKinesisSource struct {
+	// Specifies options related to data preview for viewing a sample of your data.
+	DataPreviewOptions *StreamingDataPreviewOptions `json:"dataPreviewOptions,omitempty"`
+	Database           *string                      `json:"database,omitempty"`
+	DetectSchema       *bool                        `json:"detectSchema,omitempty"`
+	Name               *string                      `json:"name,omitempty"`
+	// Additional options for the Amazon Kinesis streaming data source.
+	StreamingOptions *KinesisStreamingSourceOptions `json:"streamingOptions,omitempty"`
+	Table            *string                        `json:"table,omitempty"`
+	WindowSize       *int64                         `json:"windowSize,omitempty"`
+}
+
+// A policy that specifies update behavior for the crawler.
+type CatalogSchemaChangePolicy struct {
+	EnableUpdateCatalog *bool   `json:"enableUpdateCatalog,omitempty"`
+	UpdateBehavior      *string `json:"updateBehavior,omitempty"`
+}
+
+// Specifies a data store in the Glue Data Catalog.
+type CatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies an Glue Data Catalog target.
+type CatalogTarget struct {
+	DatabaseName *string `json:"databaseName,omitempty"`
+}
+
+// CodeGenConfigurationNode enumerates all valid Node types. One and only one
+// of its member variables can be populated.
+type CodeGenConfigurationNode struct {
+	// Specifies a transform that groups rows by chosen fields and computes the
+	// aggregated value by specified function.
+	Aggregate *Aggregate `json:"aggregate,omitempty"`
+	// Specifies an Amazon Redshift source.
+	AmazonRedshiftSource *AmazonRedshiftSource `json:"amazonRedshiftSource,omitempty"`
+	// Specifies an Amazon Redshift target.
+	AmazonRedshiftTarget *AmazonRedshiftTarget `json:"amazonRedshiftTarget,omitempty"`
+	// Specifies a transform that maps data property keys in the data source to
+	// data property keys in the data target. You can rename keys, modify the data
+	// types for keys, and choose which keys to drop from the dataset.
+	ApplyMapping *ApplyMapping `json:"applyMapping,omitempty"`
+	// Specifies a connector to an Amazon Athena data source.
+	AthenaConnectorSource *AthenaConnectorSource `json:"athenaConnectorSource,omitempty"`
+	// Specifies a Delta Lake data source that is registered in the Glue Data Catalog.
+	CatalogDeltaSource *CatalogDeltaSource `json:"catalogDeltaSource,omitempty"`
+	// Specifies a Hudi data source that is registered in the Glue Data Catalog.
+	CatalogHudiSource *CatalogHudiSource `json:"catalogHudiSource,omitempty"`
+	// Specifies an Apache Kafka data store in the Data Catalog.
+	CatalogKafkaSource *CatalogKafkaSource `json:"catalogKafkaSource,omitempty"`
+	// Specifies a Kinesis data source in the Glue Data Catalog.
+	CatalogKinesisSource *CatalogKinesisSource `json:"catalogKinesisSource,omitempty"`
+	// Specifies a data store in the Glue Data Catalog.
+	CatalogSource *CatalogSource `json:"catalogSource,omitempty"`
+	// Specifies a target that uses a Glue Data Catalog table.
+	CatalogTarget *BasicCatalogTarget `json:"catalogTarget,omitempty"`
+	// Specifies a source generated with standard connection options.
+	ConnectorDataSource *ConnectorDataSource `json:"connectorDataSource,omitempty"`
+	// Specifies a target generated with standard connection options.
+	ConnectorDataTarget *ConnectorDataTarget `json:"connectorDataTarget,omitempty"`
+	// Specifies a transform that uses custom code you provide to perform the data
+	// transformation. The output is a collection of DynamicFrames.
+	CustomCode *CustomCode `json:"customCode,omitempty"`
+	// Specifies the direct JDBC source connection.
+	DirectJDBCSource *DirectJDBCSource `json:"directJDBCSource,omitempty"`
+	// Specifies an Apache Kafka data store.
+	DirectKafkaSource *DirectKafkaSource `json:"directKafkaSource,omitempty"`
+	// Specifies a direct Amazon Kinesis data source.
+	DirectKinesisSource *DirectKinesisSource `json:"directKinesisSource,omitempty"`
+	// Specifies a transform that removes rows of repeating data from a data set.
+	DropDuplicates *DropDuplicates `json:"dropDuplicates,omitempty"`
+	// Specifies a transform that chooses the data property keys that you want to
+	// drop.
+	DropFields *DropFields `json:"dropFields,omitempty"`
+	// Specifies a transform that removes columns from the dataset if all values
+	// in the column are 'null'. By default, Glue Studio will recognize null objects,
+	// but some values such as empty strings, strings that are "null", -1 integers
+	// or other placeholders such as zeros, are not automatically recognized as
+	// nulls.
+	DropNullFields *DropNullFields `json:"dropNullFields,omitempty"`
+	// Specifies the set of parameters needed to perform the dynamic transform.
+	DynamicTransform *DynamicTransform `json:"dynamicTransform,omitempty"`
+	// Specifies a DynamoDB data source in the Glue Data Catalog.
+	DynamoDBCatalogSource *DynamoDBCatalogSource `json:"dynamoDBCatalogSource,omitempty"`
+	// Specifies your data quality evaluation criteria.
+	EvaluateDataQuality *EvaluateDataQuality `json:"evaluateDataQuality,omitempty"`
+	// Specifies your data quality evaluation criteria.
+	EvaluateDataQualityMultiFrame *EvaluateDataQualityMultiFrame `json:"evaluateDataQualityMultiFrame,omitempty"`
+	// Specifies a transform that locates records in the dataset that have missing
+	// values and adds a new field with a value determined by imputation. The input
+	// data set is used to train the machine learning model that determines what
+	// the missing value should be.
+	FillMissingValues *FillMissingValues `json:"fillMissingValues,omitempty"`
+	// Specifies a transform that splits a dataset into two, based on a filter condition.
+	Filter *Filter `json:"filter,omitempty"`
+	// Specifies the data store in the governed Glue Data Catalog.
+	GovernedCatalogSource *GovernedCatalogSource `json:"governedCatalogSource,omitempty"`
+	// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+	GovernedCatalogTarget *GovernedCatalogTarget `json:"governedCatalogTarget,omitempty"`
+	// Specifies a connector to a JDBC data source.
+	JDBCConnectorSource *JDBCConnectorSource `json:"jDBCConnectorSource,omitempty"`
+	// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+	// storage.
+	JDBCConnectorTarget *JDBCConnectorTarget `json:"jDBCConnectorTarget,omitempty"`
+	// Specifies a transform that joins two datasets into one dataset using a comparison
+	// phrase on the specified data property keys. You can use inner, outer, left,
+	// right, left semi, and left anti joins.
+	Join *Join `json:"join,omitempty"`
+	// Specifies a transform that merges a DynamicFrame with a staging DynamicFrame
+	// based on the specified primary keys to identify records. Duplicate records
+	// (records with the same primary keys) are not de-duplicated.
+	Merge *Merge `json:"merge,omitempty"`
+	// Specifies a Microsoft SQL server data source in the Glue Data Catalog.
+	MicrosoftSQLServerCatalogSource *MicrosoftSQLServerCatalogSource `json:"microsoftSQLServerCatalogSource,omitempty"`
+	// Specifies a target that uses Microsoft SQL.
+	MicrosoftSQLServerCatalogTarget *MicrosoftSQLServerCatalogTarget `json:"microsoftSQLServerCatalogTarget,omitempty"`
+	// Specifies a MySQL data source in the Glue Data Catalog.
+	MySQLCatalogSource *MySQLCatalogSource `json:"mySQLCatalogSource,omitempty"`
+	// Specifies a target that uses MySQL.
+	MySQLCatalogTarget *MySQLCatalogTarget `json:"mySQLCatalogTarget,omitempty"`
+	// Specifies an Oracle data source in the Glue Data Catalog.
+	OracleSQLCatalogSource *OracleSQLCatalogSource `json:"oracleSQLCatalogSource,omitempty"`
+	// Specifies a target that uses Oracle SQL.
+	OracleSQLCatalogTarget *OracleSQLCatalogTarget `json:"oracleSQLCatalogTarget,omitempty"`
+	// Specifies a transform that identifies, removes or masks PII data.
+	PIIDetection *PIIDetection `json:"pIIDetection,omitempty"`
+	// Specifies a PostgresSQL data source in the Glue Data Catalog.
+	PostgreSQLCatalogSource *PostgreSQLCatalogSource `json:"postgreSQLCatalogSource,omitempty"`
+	// Specifies a target that uses Postgres SQL.
+	PostgreSQLCatalogTarget *PostgreSQLCatalogTarget `json:"postgreSQLCatalogTarget,omitempty"`
+	// A Glue Studio node that uses a Glue DataBrew recipe in Glue jobs.
+	Recipe *Recipe `json:"recipe,omitempty"`
+	// Specifies an Amazon Redshift data store.
+	RedshiftSource *RedshiftSource `json:"redshiftSource,omitempty"`
+	// Specifies a target that uses Amazon Redshift.
+	RedshiftTarget *RedshiftTarget `json:"redshiftTarget,omitempty"`
+	// Specifies a Relational database data source in the Glue Data Catalog.
+	RelationalCatalogSource *RelationalCatalogSource `json:"relationalCatalogSource,omitempty"`
+	// Specifies a transform that renames a single data property key.
+	RenameField *RenameField `json:"renameField,omitempty"`
+	// Specifies a Delta Lake data source that is registered in the Glue Data Catalog.
+	// The data source must be stored in Amazon S3.
+	S3CatalogDeltaSource *S3CatalogDeltaSource `json:"s3CatalogDeltaSource,omitempty"`
+	// Specifies a Hudi data source that is registered in the Glue Data Catalog.
+	// The Hudi data source must be stored in Amazon S3.
+	S3CatalogHudiSource *S3CatalogHudiSource `json:"s3CatalogHudiSource,omitempty"`
+	// Specifies an Amazon S3 data store in the Glue Data Catalog.
+	S3CatalogSource *S3CatalogSource `json:"s3CatalogSource,omitempty"`
+	// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+	S3CatalogTarget *S3CatalogTarget `json:"s3CatalogTarget,omitempty"`
+	// Specifies a command-separated value (CSV) data store stored in Amazon S3.
+	S3CsvSource *S3CsvSource `json:"s3CsvSource,omitempty"`
+	// Specifies a target that writes to a Delta Lake data source in the Glue Data
+	// Catalog.
+	S3DeltaCatalogTarget *S3DeltaCatalogTarget `json:"s3DeltaCatalogTarget,omitempty"`
+	// Specifies a target that writes to a Delta Lake data source in Amazon S3.
+	S3DeltaDirectTarget *S3DeltaDirectTarget `json:"s3DeltaDirectTarget,omitempty"`
+	// Specifies a Delta Lake data source stored in Amazon S3.
+	S3DeltaSource *S3DeltaSource `json:"s3DeltaSource,omitempty"`
+	// Specifies a data target that writes to Amazon S3.
+	S3DirectTarget *S3DirectTarget `json:"s3DirectTarget,omitempty"`
+	// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+	// storage.
+	S3GlueParquetTarget *S3GlueParquetTarget `json:"s3GlueParquetTarget,omitempty"`
+	// Specifies a target that writes to a Hudi data source in the Glue Data Catalog.
+	S3HudiCatalogTarget *S3HudiCatalogTarget `json:"s3HudiCatalogTarget,omitempty"`
+	// Specifies a target that writes to a Hudi data source in Amazon S3.
+	S3HudiDirectTarget *S3HudiDirectTarget `json:"s3HudiDirectTarget,omitempty"`
+	// Specifies a Hudi data source stored in Amazon S3.
+	S3HudiSource *S3HudiSource `json:"s3HudiSource,omitempty"`
+	// Specifies a JSON data store stored in Amazon S3.
+	S3JSONSource *S3JSONSource `json:"s3JSONSource,omitempty"`
+	// Specifies an Apache Parquet data store stored in Amazon S3.
+	S3ParquetSource *S3ParquetSource `json:"s3ParquetSource,omitempty"`
+	// Specifies a transform that chooses the data property keys that you want to
+	// keep.
+	SelectFields *SelectFields `json:"selectFields,omitempty"`
+	// Specifies a transform that chooses one DynamicFrame from a collection of
+	// DynamicFrames. The output is the selected DynamicFrame
+	SelectFromCollection *SelectFromCollection `json:"selectFromCollection,omitempty"`
+	// Specifies a Snowflake data source.
+	SnowflakeSource *SnowflakeSource `json:"snowflakeSource,omitempty"`
+	// Specifies a Snowflake target.
+	SnowflakeTarget *SnowflakeTarget `json:"snowflakeTarget,omitempty"`
+	// Specifies a connector to an Apache Spark data source.
+	SparkConnectorSource *SparkConnectorSource `json:"sparkConnectorSource,omitempty"`
+	// Specifies a target that uses an Apache Spark connector.
+	SparkConnectorTarget *SparkConnectorTarget `json:"sparkConnectorTarget,omitempty"`
+	// Specifies a transform where you enter a SQL query using Spark SQL syntax
+	// to transform the data. The output is a single DynamicFrame.
+	SparkSQL *SparkSQL `json:"sparkSQL,omitempty"`
+	// Specifies a transform that writes samples of the data to an Amazon S3 bucket.
+	Spigot *Spigot `json:"spigot,omitempty"`
+	// Specifies a transform that splits data property keys into two DynamicFrames.
+	// The output is a collection of DynamicFrames: one with selected data property
+	// keys, and one with the remaining data property keys.
+	SplitFields *SplitFields `json:"splitFields,omitempty"`
+	// Specifies a transform that combines the rows from two or more datasets into
+	// a single result.
+	Union *Union `json:"union,omitempty"`
+}
+
+// A column in a Table.
+type Column struct {
+	Name *string `json:"name,omitempty"`
+	Type *string `json:"type_,omitempty"`
+}
+
+// Encapsulates a column name that failed and the reason for failure.
+type ColumnError struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// A structure containing the column name and column importance score for a
+// column.
+//
+// Column importance helps you understand how columns contribute to your model,
+// by identifying which columns in your records are more important than others.
+type ColumnImportance struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// A filter that uses both column-level and row-level filtering.
+type ColumnRowFilter struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// Represents the generated column-level statistics for a table or partition.
+type ColumnStatistics struct {
+	ColumnName *string `json:"columnName,omitempty"`
+}
+
+// The object that shows the details of the column stats run.
+type ColumnStatisticsTaskRun struct {
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	WorkerType   *string `json:"workerType,omitempty"`
+}
+
+// Defines a condition under which a trigger fires.
+type Condition struct {
+	CrawlerName *string `json:"crawlerName,omitempty"`
+	JobName     *string `json:"jobName,omitempty"`
+}
+
+// Condition expression defined in the Glue Studio data preparation recipe node.
+type ConditionExpression struct {
+	Condition    *string `json:"condition,omitempty"`
+	TargetColumn *string `json:"targetColumn,omitempty"`
+	Value        *string `json:"value,omitempty"`
+}
+
+// Defines a connection to a data source.
+type Connection struct {
+	Description   *string `json:"description,omitempty"`
+	LastUpdatedBy *string `json:"lastUpdatedBy,omitempty"`
+	Name          *string `json:"name,omitempty"`
+}
+
+// A structure that is used to specify a connection to create or update.
+type ConnectionInput struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// The data structure used by the Data Catalog to encrypt the password as part
+// of CreateConnection or UpdateConnection and store it in the ENCRYPTED_PASSWORD
+// field in the connection properties. You can enable catalog encryption or
+// only password encryption.
+//
+// When a CreationConnection request arrives containing a password, the Data
+// Catalog first encrypts the password using your KMS key. It then encrypts
+// the whole connection object again if catalog encryption is also enabled.
+//
+// This encryption requires that you set KMS key permissions to enable or restrict
+// access on the password key according to your security requirements. For example,
+// you might want only administrators to have decrypt permission on the password
+// key.
+type ConnectionPasswordEncryption struct {
+	AWSKMSKeyID *string `json:"awsKMSKeyID,omitempty"`
+}
+
+// Specifies the connections used by a job.
+type ConnectionsList struct {
+	Connections []*string `json:"connections,omitempty"`
+}
+
+// Specifies a source generated with standard connection options.
+type ConnectorDataSource struct {
+	ConnectionType *string            `json:"connectionType,omitempty"`
+	Data           map[string]*string `json:"data,omitempty"`
+	Name           *string            `json:"name,omitempty"`
+	OutputSchemas  []*GlueSchema      `json:"outputSchemas,omitempty"`
+}
+
+// Specifies a target generated with standard connection options.
+type ConnectorDataTarget struct {
+	ConnectionType *string            `json:"connectionType,omitempty"`
+	Data           map[string]*string `json:"data,omitempty"`
+	Inputs         []*string          `json:"inputs,omitempty"`
+	Name           *string            `json:"name,omitempty"`
+}
+
+// The details of a crawl in the workflow.
+type Crawl struct {
+	CompletedOn  *metav1.Time `json:"completedOn,omitempty"`
+	ErrorMessage *string      `json:"errorMessage,omitempty"`
+	StartedOn    *metav1.Time `json:"startedOn,omitempty"`
+}
+
+// Specifies a crawler program that examines a data source and uses classifiers
+// to try to determine its schema. If successful, the crawler records metadata
+// concerning the data source in the Glue Data Catalog.
+type Crawler struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// Contains the information for a run of a crawler.
+type CrawlerHistory struct {
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	Summary      *string `json:"summary,omitempty"`
+}
+
+// Metrics for a specified crawler.
+type CrawlerMetrics struct {
+	CrawlerName *string `json:"crawlerName,omitempty"`
+}
+
+// A list of fields, comparators and value that you can use to filter the crawler
+// runs for a specified crawler.
+type CrawlsFilter struct {
+	FieldValue *string `json:"fieldValue,omitempty"`
+}
+
+// Specifies a custom CSV classifier for CreateClassifier to create.
+type CreateCsvClassifierRequest struct {
+	AllowSingleColumn        *bool   `json:"allowSingleColumn,omitempty"`
+	CustomDatatypeConfigured *bool   `json:"customDatatypeConfigured,omitempty"`
+	DisableValueTrimming     *bool   `json:"disableValueTrimming,omitempty"`
+	Name                     *string `json:"name,omitempty"`
+}
+
+// Specifies a grok classifier for CreateClassifier to create.
+type CreateGrokClassifierRequest struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Specifies a JSON classifier for CreateClassifier to create.
+type CreateJSONClassifierRequest struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Specifies an XML classifier for CreateClassifier to create.
+type CreateXMLClassifierRequest struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// A classifier for custom CSV content.
+type CsvClassifier struct {
+	AllowSingleColumn        *bool   `json:"allowSingleColumn,omitempty"`
+	CustomDatatypeConfigured *bool   `json:"customDatatypeConfigured,omitempty"`
+	DisableValueTrimming     *bool   `json:"disableValueTrimming,omitempty"`
+	Name                     *string `json:"name,omitempty"`
+}
+
+// Specifies a transform that uses custom code you provide to perform the data
+// transformation. The output is a collection of DynamicFrames.
+type CustomCode struct {
+	ClassName     *string       `json:"className,omitempty"`
+	Code          *string       `json:"code,omitempty"`
+	Inputs        []*string     `json:"inputs,omitempty"`
+	Name          *string       `json:"name,omitempty"`
+	OutputSchemas []*GlueSchema `json:"outputSchemas,omitempty"`
+}
+
+// An object representing a custom pattern for detecting sensitive data across
+// the columns and rows of your structured data.
+type CustomEntityType struct {
+	Name        *string `json:"name,omitempty"`
+	RegexString *string `json:"regexString,omitempty"`
+}
+
+// Options to configure how your data quality evaluation results are published.
+type DQResultsPublishingOptions struct {
+	CloudWatchMetricsEnabled *bool   `json:"cloudWatchMetricsEnabled,omitempty"`
+	EvaluationContext        *string `json:"evaluationContext,omitempty"`
+	ResultsPublishingEnabled *bool   `json:"resultsPublishingEnabled,omitempty"`
+	ResultsS3Prefix          *string `json:"resultsS3Prefix,omitempty"`
+}
+
+// Options to configure how your job will stop if your data quality evaluation
+// fails.
+type DQStopJobOnFailureOptions struct {
+	StopJobOnFailureTiming *string `json:"stopJobOnFailureTiming,omitempty"`
+}
+
+// Describes the result of the evaluation of a data quality analyzer.
+type DataQualityAnalyzerResult struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Additional run options you can specify for an evaluation run.
+type DataQualityEvaluationRunAdditionalRunOptions struct {
+	CloudWatchMetricsEnabled *bool   `json:"cloudWatchMetricsEnabled,omitempty"`
+	ResultsS3Prefix          *string `json:"resultsS3Prefix,omitempty"`
+}
+
+// Describes the data quality metric value according to the analysis of historical
+// data.
+type DataQualityMetricValues struct {
+	ActualValue   *float64 `json:"actualValue,omitempty"`
+	ExpectedValue *float64 `json:"expectedValue,omitempty"`
+	LowerLimit    *float64 `json:"lowerLimit,omitempty"`
+	UpperLimit    *float64 `json:"upperLimit,omitempty"`
+}
+
+// Describes a data quality result.
+type DataQualityResult struct {
+	EvaluationContext *string `json:"evaluationContext,omitempty"`
+	JobName           *string `json:"jobName,omitempty"`
+	RulesetName       *string `json:"rulesetName,omitempty"`
+}
+
+// Describes a data quality result.
+type DataQualityResultDescription struct {
+	JobName *string `json:"jobName,omitempty"`
+}
+
+// Criteria used to return data quality results.
+type DataQualityResultFilterCriteria struct {
+	JobName *string `json:"jobName,omitempty"`
+}
+
+// Describes the result of the evaluation of a data quality rule.
+type DataQualityRuleResult struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The criteria used to filter data quality rulesets.
+type DataQualityRulesetFilterCriteria struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// Describes a data quality ruleset returned by GetDataQualityRuleset.
+type DataQualityRulesetListDetails struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	RuleCount   *int64  `json:"ruleCount,omitempty"`
+}
+
+// An object representing an Glue table.
+type DataQualityTargetTable struct {
+	CatalogID    *string `json:"catalogID,omitempty"`
+	DatabaseName *string `json:"databaseName,omitempty"`
+	TableName    *string `json:"tableName,omitempty"`
+}
+
+// The Database object represents a logical grouping of tables that might reside
+// in a Hive metastore or an RDBMS.
+type Database struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// A structure that describes a target database for resource linking.
+type DatabaseIdentifier struct {
+	DatabaseName *string `json:"databaseName,omitempty"`
+	Region       *string `json:"region,omitempty"`
+}
+
+// The structure used to create or update a database.
+type DatabaseInput struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// A structure representing the datatype of the value.
+type Datatype struct {
+	ID    *string `json:"id,omitempty"`
+	Label *string `json:"label,omitempty"`
+}
+
+// Specifies a Delta data store to crawl one or more Delta tables.
+type DeltaTarget struct {
+	CreateNativeDeltaTable *bool `json:"createNativeDeltaTable,omitempty"`
+	WriteManifest          *bool `json:"writeManifest,omitempty"`
+}
+
+// A development endpoint where a developer can remotely debug extract, transform,
+// and load (ETL) scripts.
+type DevEndpoint struct {
+	AvailabilityZone                   *string      `json:"availabilityZone,omitempty"`
+	CreatedTimestamp                   *metav1.Time `json:"createdTimestamp,omitempty"`
+	EndpointName                       *string      `json:"endpointName,omitempty"`
+	ExtraJarsS3Path                    *string      `json:"extraJarsS3Path,omitempty"`
+	ExtraPythonLibsS3Path              *string      `json:"extraPythonLibsS3Path,omitempty"`
+	FailureReason                      *string      `json:"failureReason,omitempty"`
+	GlueVersion                        *string      `json:"glueVersion,omitempty"`
+	LastModifiedTimestamp              *metav1.Time `json:"lastModifiedTimestamp,omitempty"`
+	LastUpdateStatus                   *string      `json:"lastUpdateStatus,omitempty"`
+	NumberOfNodes                      *int64       `json:"numberOfNodes,omitempty"`
+	NumberOfWorkers                    *int64       `json:"numberOfWorkers,omitempty"`
+	PrivateAddress                     *string      `json:"privateAddress,omitempty"`
+	PublicAddress                      *string      `json:"publicAddress,omitempty"`
+	PublicKey                          *string      `json:"publicKey,omitempty"`
+	SecurityConfiguration              *string      `json:"securityConfiguration,omitempty"`
+	Status                             *string      `json:"status,omitempty"`
+	SubnetID                           *string      `json:"subnetID,omitempty"`
+	VPCID                              *string      `json:"vpcID,omitempty"`
+	WorkerType                         *string      `json:"workerType,omitempty"`
+	YarnEndpointAddress                *string      `json:"yarnEndpointAddress,omitempty"`
+	ZeppelinRemoteSparkInterpreterPort *int64       `json:"zeppelinRemoteSparkInterpreterPort,omitempty"`
+}
+
+// Custom libraries to be loaded into a development endpoint.
+type DevEndpointCustomLibraries struct {
+	ExtraJarsS3Path       *string `json:"extraJarsS3Path,omitempty"`
+	ExtraPythonLibsS3Path *string `json:"extraPythonLibsS3Path,omitempty"`
+}
+
+// Specifies the direct JDBC source connection.
+type DirectJDBCSource struct {
+	ConnectionName *string `json:"connectionName,omitempty"`
+	ConnectionType *string `json:"connectionType,omitempty"`
+	Database       *string `json:"database,omitempty"`
+	Name           *string `json:"name,omitempty"`
+	RedshiftTmpDir *string `json:"redshiftTmpDir,omitempty"`
+	Table          *string `json:"table,omitempty"`
+}
+
+// Specifies an Apache Kafka data store.
+type DirectKafkaSource struct {
+	// Specifies options related to data preview for viewing a sample of your data.
+	DataPreviewOptions *StreamingDataPreviewOptions `json:"dataPreviewOptions,omitempty"`
+	DetectSchema       *bool                        `json:"detectSchema,omitempty"`
+	Name               *string                      `json:"name,omitempty"`
+	// Additional options for streaming.
+	StreamingOptions *KafkaStreamingSourceOptions `json:"streamingOptions,omitempty"`
+	WindowSize       *int64                       `json:"windowSize,omitempty"`
+}
+
+// Specifies a direct Amazon Kinesis data source.
+type DirectKinesisSource struct {
+	// Specifies options related to data preview for viewing a sample of your data.
+	DataPreviewOptions *StreamingDataPreviewOptions `json:"dataPreviewOptions,omitempty"`
+	DetectSchema       *bool                        `json:"detectSchema,omitempty"`
+	Name               *string                      `json:"name,omitempty"`
+	// Additional options for the Amazon Kinesis streaming data source.
+	StreamingOptions *KinesisStreamingSourceOptions `json:"streamingOptions,omitempty"`
+	WindowSize       *int64                         `json:"windowSize,omitempty"`
+}
+
+// A policy that specifies update behavior for the crawler.
+type DirectSchemaChangePolicy struct {
+	Database            *string `json:"database,omitempty"`
+	EnableUpdateCatalog *bool   `json:"enableUpdateCatalog,omitempty"`
+	Table               *string `json:"table,omitempty"`
+	UpdateBehavior      *string `json:"updateBehavior,omitempty"`
+}
+
+// Specifies a transform that removes rows of repeating data from a data set.
+type DropDuplicates struct {
+	Columns [][]*string `json:"columns,omitempty"`
+	Inputs  []*string   `json:"inputs,omitempty"`
+	Name    *string     `json:"name,omitempty"`
+}
+
+// Specifies a transform that chooses the data property keys that you want to
+// drop.
+type DropFields struct {
+	Inputs []*string   `json:"inputs,omitempty"`
+	Name   *string     `json:"name,omitempty"`
+	Paths  [][]*string `json:"paths,omitempty"`
+}
+
+// Specifies a transform that removes columns from the dataset if all values
+// in the column are 'null'. By default, Glue Studio will recognize null objects,
+// but some values such as empty strings, strings that are "null", -1 integers
+// or other placeholders such as zeros, are not automatically recognized as
+// nulls.
+type DropNullFields struct {
+	Inputs []*string `json:"inputs,omitempty"`
+	Name   *string   `json:"name,omitempty"`
+	// Represents whether certain values are recognized as null values for removal.
+	NullCheckBoxList *NullCheckBoxList `json:"nullCheckBoxList,omitempty"`
+	NullTextList     []*NullValueField `json:"nullTextList,omitempty"`
+}
+
+// Specifies the set of parameters needed to perform the dynamic transform.
+type DynamicTransform struct {
+	FunctionName  *string                     `json:"functionName,omitempty"`
+	Inputs        []*string                   `json:"inputs,omitempty"`
+	Name          *string                     `json:"name,omitempty"`
+	OutputSchemas []*GlueSchema               `json:"outputSchemas,omitempty"`
+	Parameters    []*TransformConfigParameter `json:"parameters,omitempty"`
+	Path          *string                     `json:"path,omitempty"`
+	TransformName *string                     `json:"transformName,omitempty"`
+	Version       *string                     `json:"version,omitempty"`
+}
+
+// Specifies a DynamoDB data source in the Glue Data Catalog.
+type DynamoDBCatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies an Amazon DynamoDB table to crawl.
+type DynamoDBTarget struct {
+	ScanAll  *bool    `json:"scanAll,omitempty"`
+	ScanRate *float64 `json:"scanRate,omitempty"`
+}
+
+// An edge represents a directed connection between two Glue components that
+// are part of the workflow the edge belongs to.
+type Edge struct {
+	DestinationID *string `json:"destinationID,omitempty"`
+	SourceID      *string `json:"sourceID,omitempty"`
+}
+
+// Specifies the encryption-at-rest configuration for the Data Catalog.
+type EncryptionAtRest struct {
+	SSEAWSKMSKeyID *string `json:"sseAWSKMSKeyID,omitempty"`
+}
+
+// Contains details about an error.
+type ErrorDetail struct {
+	ErrorCode    *string `json:"errorCode,omitempty"`
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+}
+
+// Specifies your data quality evaluation criteria.
+type EvaluateDataQuality struct {
+	Inputs []*string `json:"inputs,omitempty"`
+	Name   *string   `json:"name,omitempty"`
+	Output *string   `json:"output,omitempty"`
+	// Options to configure how your data quality evaluation results are published.
+	PublishingOptions *DQResultsPublishingOptions `json:"publishingOptions,omitempty"`
+	Ruleset           *string                     `json:"ruleset,omitempty"`
+	// Options to configure how your job will stop if your data quality evaluation
+	// fails.
+	StopJobOnFailureOptions *DQStopJobOnFailureOptions `json:"stopJobOnFailureOptions,omitempty"`
+}
+
+// Specifies your data quality evaluation criteria.
+type EvaluateDataQualityMultiFrame struct {
+	AdditionalDataSources map[string]*string `json:"additionalDataSources,omitempty"`
+	AdditionalOptions     map[string]*string `json:"additionalOptions,omitempty"`
+	Inputs                []*string          `json:"inputs,omitempty"`
+	Name                  *string            `json:"name,omitempty"`
+	// Options to configure how your data quality evaluation results are published.
+	PublishingOptions *DQResultsPublishingOptions `json:"publishingOptions,omitempty"`
+	Ruleset           *string                     `json:"ruleset,omitempty"`
+	// Options to configure how your job will stop if your data quality evaluation
+	// fails.
+	StopJobOnFailureOptions *DQStopJobOnFailureOptions `json:"stopJobOnFailureOptions,omitempty"`
+}
+
+// An execution property of a job.
+type ExecutionProperty struct {
+	MaxConcurrentRuns *int64 `json:"maxConcurrentRuns,omitempty"`
+}
+
+// Specifies configuration properties for an exporting labels task run.
+type ExportLabelsTaskRunProperties struct {
+	OutputS3Path *string `json:"outputS3Path,omitempty"`
+}
+
+// A database that points to an entity outside the Glue Data Catalog.
+type FederatedDatabase struct {
+	ConnectionName *string `json:"connectionName,omitempty"`
+}
+
+// A table that points to an entity outside the Glue Data Catalog.
+type FederatedTable struct {
+	ConnectionName *string `json:"connectionName,omitempty"`
+}
+
+// Specifies a transform that locates records in the dataset that have missing
+// values and adds a new field with a value determined by imputation. The input
+// data set is used to train the machine learning model that determines what
+// the missing value should be.
+type FillMissingValues struct {
+	FilledPath  *string   `json:"filledPath,omitempty"`
+	ImputedPath *string   `json:"imputedPath,omitempty"`
+	Inputs      []*string `json:"inputs,omitempty"`
+	Name        *string   `json:"name,omitempty"`
+}
+
+// Specifies a transform that splits a dataset into two, based on a filter condition.
+type Filter struct {
+	Filters         []*FilterExpression `json:"filters,omitempty"`
+	Inputs          []*string           `json:"inputs,omitempty"`
+	LogicalOperator *string             `json:"logicalOperator,omitempty"`
+	Name            *string             `json:"name,omitempty"`
+}
+
+// Specifies a filter expression.
+type FilterExpression struct {
+	Negated   *bool          `json:"negated,omitempty"`
+	Operation *string        `json:"operation,omitempty"`
+	Values    []*FilterValue `json:"values,omitempty"`
+}
+
+// Represents a single entry in the list of values for a FilterExpression.
+type FilterValue struct {
+	Type  *string   `json:"type,omitempty"`
+	Value []*string `json:"value,omitempty"`
+}
+
+// The parameters to configure the find matches transform.
+type FindMatchesParameters struct {
+	EnforceProvidedLabels *bool `json:"enforceProvidedLabels,omitempty"`
+}
+
+// Specifies configuration properties for a Find Matches task run.
+type FindMatchesTaskRunProperties struct {
+	JobName *string `json:"jobName,omitempty"`
+}
+
+// Specifies a user-defined schema when a schema cannot be determined by Glue.
+type GlueSchema struct {
+	Columns []*GlueStudioSchemaColumn `json:"columns,omitempty"`
+}
+
+// Specifies a single column in a Glue schema definition.
+type GlueStudioSchemaColumn struct {
+	Name *string `json:"name,omitempty"`
+	Type *string `json:"type,omitempty"`
+}
+
+// Specifies the data store in the governed Glue Data Catalog.
+type GovernedCatalogSource struct {
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions  *S3SourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	Database           *string                    `json:"database,omitempty"`
+	Name               *string                    `json:"name,omitempty"`
+	PartitionPredicate *string                    `json:"partitionPredicate,omitempty"`
+	Table              *string                    `json:"table,omitempty"`
+}
+
+// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+type GovernedCatalogTarget struct {
+	Database      *string     `json:"database,omitempty"`
+	Inputs        []*string   `json:"inputs,omitempty"`
+	Name          *string     `json:"name,omitempty"`
+	PartitionKeys [][]*string `json:"partitionKeys,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *CatalogSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+	Table              *string                    `json:"table,omitempty"`
+}
+
+// A classifier that uses grok patterns.
+type GrokClassifier struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Specifies an Apache Hudi data source.
+type HudiTarget struct {
+	MaximumTraversalDepth *int64 `json:"maximumTraversalDepth,omitempty"`
+}
+
+// The configuration for an Iceberg orphan file deletion optimizer.
+type IcebergOrphanFileDeletionConfiguration struct {
+	OrphanFileRetentionPeriodInDays *int64 `json:"orphanFileRetentionPeriodInDays,omitempty"`
+}
+
+// The configuration for an Iceberg snapshot retention optimizer.
+type IcebergRetentionConfiguration struct {
+	CleanExpiredFiles             *bool  `json:"cleanExpiredFiles,omitempty"`
+	NumberOfSnapshotsToRetain     *int64 `json:"numberOfSnapshotsToRetain,omitempty"`
+	SnapshotRetentionPeriodInDays *int64 `json:"snapshotRetentionPeriodInDays,omitempty"`
+}
+
+// Specifies an Apache Iceberg data source where Iceberg tables are stored in
+// Amazon S3.
+type IcebergTarget struct {
+	MaximumTraversalDepth *int64 `json:"maximumTraversalDepth,omitempty"`
+}
+
+// Specifies configuration properties for an importing labels task run.
+type ImportLabelsTaskRunProperties struct {
+	InputS3Path *string `json:"inputS3Path,omitempty"`
+}
+
+// Additional connection options for the connector.
+type JDBCConnectorOptions struct {
+	DataTypeMapping          map[string]*string `json:"dataTypeMapping,omitempty"`
+	FilterPredicate          *string            `json:"filterPredicate,omitempty"`
+	JobBookmarkKeys          []*string          `json:"jobBookmarkKeys,omitempty"`
+	JobBookmarkKeysSortOrder *string            `json:"jobBookmarkKeysSortOrder,omitempty"`
+	LowerBound               *int64             `json:"lowerBound,omitempty"`
+	NumPartitions            *int64             `json:"numPartitions,omitempty"`
+	PartitionColumn          *string            `json:"partitionColumn,omitempty"`
+	UpperBound               *int64             `json:"upperBound,omitempty"`
+}
+
+// Specifies a connector to a JDBC data source.
+type JDBCConnectorSource struct {
+	// Additional connection options for the connector.
+	AdditionalOptions *JDBCConnectorOptions `json:"additionalOptions,omitempty"`
+	ConnectionName    *string               `json:"connectionName,omitempty"`
+	ConnectionTable   *string               `json:"connectionTable,omitempty"`
+	ConnectionType    *string               `json:"connectionType,omitempty"`
+	ConnectorName     *string               `json:"connectorName,omitempty"`
+	Name              *string               `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema         `json:"outputSchemas,omitempty"`
+	Query             *string               `json:"query,omitempty"`
+}
+
+// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+// storage.
+type JDBCConnectorTarget struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	ConnectionName    *string            `json:"connectionName,omitempty"`
+	ConnectionTable   *string            `json:"connectionTable,omitempty"`
+	ConnectionType    *string            `json:"connectionType,omitempty"`
+	ConnectorName     *string            `json:"connectorName,omitempty"`
+	Inputs            []*string          `json:"inputs,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema      `json:"outputSchemas,omitempty"`
+}
+
+// A classifier for JSON content.
+type JSONClassifier struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Defines a point that a job can resume processing.
+type JobBookmarkEntry struct {
+	Attempt *int64 `json:"attempt,omitempty"`
+	Run     *int64 `json:"run,omitempty"`
+	Version *int64 `json:"version,omitempty"`
+}
+
+// Specifies code that runs when a job is run.
+type JobCommand struct {
+	Name           *string `json:"name,omitempty"`
+	PythonVersion  *string `json:"pythonVersion,omitempty"`
+	Runtime        *string `json:"runtime,omitempty"`
+	ScriptLocation *string `json:"scriptLocation,omitempty"`
+}
+
+// Contains information about a job run.
+type JobRun struct {
+	AllocatedCapacity    *int64             `json:"allocatedCapacity,omitempty"`
+	Arguments            map[string]*string `json:"arguments,omitempty"`
+	CompletedOn          *metav1.Time       `json:"completedOn,omitempty"`
+	DPUSeconds           *float64           `json:"dPUSeconds,omitempty"`
+	ExecutionClass       *string            `json:"executionClass,omitempty"`
+	GlueVersion          *string            `json:"glueVersion,omitempty"`
+	JobMode              *string            `json:"jobMode,omitempty"`
+	JobName              *string            `json:"jobName,omitempty"`
+	JobRunQueuingEnabled *bool              `json:"jobRunQueuingEnabled,omitempty"`
+	LastModifiedOn       *metav1.Time       `json:"lastModifiedOn,omitempty"`
+	LogGroupName         *string            `json:"logGroupName,omitempty"`
+	MaintenanceWindow    *string            `json:"maintenanceWindow,omitempty"`
+	MaxCapacity          *float64           `json:"maxCapacity,omitempty"`
+	// Specifies configuration properties of a notification.
+	NotificationProperty  *NotificationProperty `json:"notificationProperty,omitempty"`
+	NumberOfWorkers       *int64                `json:"numberOfWorkers,omitempty"`
+	ProfileName           *string               `json:"profileName,omitempty"`
+	SecurityConfiguration *string               `json:"securityConfiguration,omitempty"`
+	StartedOn             *metav1.Time          `json:"startedOn,omitempty"`
+	Timeout               *int64                `json:"timeout,omitempty"`
+	TriggerName           *string               `json:"triggerName,omitempty"`
+	WorkerType            *string               `json:"workerType,omitempty"`
+}
+
+// Specifies information used to update an existing job definition. The previous
+// job definition is completely overwritten by this information.
+type JobUpdate struct {
+	CodeGenConfigurationNodes map[string]*CodeGenConfigurationNode `json:"codeGenConfigurationNodes,omitempty"`
+	// Specifies code that runs when a job is run.
+	Command *JobCommand `json:"command,omitempty"`
+	// Specifies the connections used by a job.
+	Connections      *ConnectionsList   `json:"connections,omitempty"`
+	DefaultArguments map[string]*string `json:"defaultArguments,omitempty"`
+	Description      *string            `json:"description,omitempty"`
+	ExecutionClass   *string            `json:"executionClass,omitempty"`
+	// An execution property of a job.
+	ExecutionProperty       *ExecutionProperty `json:"executionProperty,omitempty"`
+	GlueVersion             *string            `json:"glueVersion,omitempty"`
+	JobMode                 *string            `json:"jobMode,omitempty"`
+	JobRunQueuingEnabled    *bool              `json:"jobRunQueuingEnabled,omitempty"`
+	LogURI                  *string            `json:"logURI,omitempty"`
+	MaintenanceWindow       *string            `json:"maintenanceWindow,omitempty"`
+	MaxCapacity             *float64           `json:"maxCapacity,omitempty"`
+	MaxRetries              *int64             `json:"maxRetries,omitempty"`
+	NonOverridableArguments map[string]*string `json:"nonOverridableArguments,omitempty"`
+	// Specifies configuration properties of a notification.
+	NotificationProperty  *NotificationProperty `json:"notificationProperty,omitempty"`
+	NumberOfWorkers       *int64                `json:"numberOfWorkers,omitempty"`
+	Role                  *string               `json:"role,omitempty"`
+	SecurityConfiguration *string               `json:"securityConfiguration,omitempty"`
+	// The details for a source control configuration for a job, allowing synchronization
+	// of job artifacts to or from a remote repository.
+	SourceControlDetails *SourceControlDetails `json:"sourceControlDetails,omitempty"`
+	Timeout              *int64                `json:"timeout,omitempty"`
+	WorkerType           *string               `json:"workerType,omitempty"`
+}
+
+// Specifies a job definition.
+type Job_SDK struct {
+	AllocatedCapacity         *int64                               `json:"allocatedCapacity,omitempty"`
+	CodeGenConfigurationNodes map[string]*CodeGenConfigurationNode `json:"codeGenConfigurationNodes,omitempty"`
+	// Specifies code that runs when a job is run.
+	Command *JobCommand `json:"command,omitempty"`
+	// Specifies the connections used by a job.
+	Connections      *ConnectionsList   `json:"connections,omitempty"`
+	CreatedOn        *metav1.Time       `json:"createdOn,omitempty"`
+	DefaultArguments map[string]*string `json:"defaultArguments,omitempty"`
+	Description      *string            `json:"description,omitempty"`
+	ExecutionClass   *string            `json:"executionClass,omitempty"`
+	// An execution property of a job.
+	ExecutionProperty       *ExecutionProperty `json:"executionProperty,omitempty"`
+	GlueVersion             *string            `json:"glueVersion,omitempty"`
+	JobMode                 *string            `json:"jobMode,omitempty"`
+	JobRunQueuingEnabled    *bool              `json:"jobRunQueuingEnabled,omitempty"`
+	LastModifiedOn          *metav1.Time       `json:"lastModifiedOn,omitempty"`
+	LogURI                  *string            `json:"logURI,omitempty"`
+	MaintenanceWindow       *string            `json:"maintenanceWindow,omitempty"`
+	MaxCapacity             *float64           `json:"maxCapacity,omitempty"`
+	MaxRetries              *int64             `json:"maxRetries,omitempty"`
+	Name                    *string            `json:"name,omitempty"`
+	NonOverridableArguments map[string]*string `json:"nonOverridableArguments,omitempty"`
+	// Specifies configuration properties of a notification.
+	NotificationProperty  *NotificationProperty `json:"notificationProperty,omitempty"`
+	NumberOfWorkers       *int64                `json:"numberOfWorkers,omitempty"`
+	ProfileName           *string               `json:"profileName,omitempty"`
+	Role                  *string               `json:"role,omitempty"`
+	SecurityConfiguration *string               `json:"securityConfiguration,omitempty"`
+	// The details for a source control configuration for a job, allowing synchronization
+	// of job artifacts to or from a remote repository.
+	SourceControlDetails *SourceControlDetails `json:"sourceControlDetails,omitempty"`
+	Timeout              *int64                `json:"timeout,omitempty"`
+	WorkerType           *string               `json:"workerType,omitempty"`
+}
+
+// Specifies a transform that joins two datasets into one dataset using a comparison
+// phrase on the specified data property keys. You can use inner, outer, left,
+// right, left semi, and left anti joins.
+type Join struct {
+	Columns  []*JoinColumn `json:"columns,omitempty"`
+	Inputs   []*string     `json:"inputs,omitempty"`
+	JoinType *string       `json:"joinType,omitempty"`
+	Name     *string       `json:"name,omitempty"`
+}
+
+// Specifies a column to be joined.
+type JoinColumn struct {
+	From *string     `json:"from,omitempty"`
+	Keys [][]*string `json:"keys,omitempty"`
+}
+
+// Additional options for streaming.
+type KafkaStreamingSourceOptions struct {
+	AddRecordTimestamp     *string      `json:"addRecordTimestamp,omitempty"`
+	Assign                 *string      `json:"assign,omitempty"`
+	BootstrapServers       *string      `json:"bootstrapServers,omitempty"`
+	Classification         *string      `json:"classification,omitempty"`
+	ConnectionName         *string      `json:"connectionName,omitempty"`
+	Delimiter              *string      `json:"delimiter,omitempty"`
+	EmitConsumerLagMetrics *string      `json:"emitConsumerLagMetrics,omitempty"`
+	EndingOffsets          *string      `json:"endingOffsets,omitempty"`
+	IncludeHeaders         *bool        `json:"includeHeaders,omitempty"`
+	MaxOffsetsPerTrigger   *int64       `json:"maxOffsetsPerTrigger,omitempty"`
+	MinPartitions          *int64       `json:"minPartitions,omitempty"`
+	NumRetries             *int64       `json:"numRetries,omitempty"`
+	PollTimeoutMs          *int64       `json:"pollTimeoutMs,omitempty"`
+	RetryIntervalMs        *int64       `json:"retryIntervalMs,omitempty"`
+	SecurityProtocol       *string      `json:"securityProtocol,omitempty"`
+	StartingOffsets        *string      `json:"startingOffsets,omitempty"`
+	StartingTimestamp      *metav1.Time `json:"startingTimestamp,omitempty"`
+	SubscribePattern       *string      `json:"subscribePattern,omitempty"`
+	TopicName              *string      `json:"topicName,omitempty"`
+}
+
+// A partition key pair consisting of a name and a type.
+type KeySchemaElement struct {
+	Name *string `json:"name,omitempty"`
+	Type *string `json:"type_,omitempty"`
+}
+
+// Additional options for the Amazon Kinesis streaming data source.
+type KinesisStreamingSourceOptions struct {
+	AddIdleTimeBetweenReads  *bool        `json:"addIdleTimeBetweenReads,omitempty"`
+	AddRecordTimestamp       *string      `json:"addRecordTimestamp,omitempty"`
+	AvoidEmptyBatches        *bool        `json:"avoidEmptyBatches,omitempty"`
+	Classification           *string      `json:"classification,omitempty"`
+	Delimiter                *string      `json:"delimiter,omitempty"`
+	DescribeShardInterval    *int64       `json:"describeShardInterval,omitempty"`
+	EmitConsumerLagMetrics   *string      `json:"emitConsumerLagMetrics,omitempty"`
+	EndpointURL              *string      `json:"endpointURL,omitempty"`
+	IdleTimeBetweenReadsInMs *int64       `json:"idleTimeBetweenReadsInMs,omitempty"`
+	MaxFetchRecordsPerShard  *int64       `json:"maxFetchRecordsPerShard,omitempty"`
+	MaxFetchTimeInMs         *int64       `json:"maxFetchTimeInMs,omitempty"`
+	MaxRecordPerRead         *int64       `json:"maxRecordPerRead,omitempty"`
+	MaxRetryIntervalMs       *int64       `json:"maxRetryIntervalMs,omitempty"`
+	NumRetries               *int64       `json:"numRetries,omitempty"`
+	RetryIntervalMs          *int64       `json:"retryIntervalMs,omitempty"`
+	RoleARN                  *string      `json:"roleARN,omitempty"`
+	RoleSessionName          *string      `json:"roleSessionName,omitempty"`
+	StartingPosition         *string      `json:"startingPosition,omitempty"`
+	StartingTimestamp        *metav1.Time `json:"startingTimestamp,omitempty"`
+	StreamARN                *string      `json:"streamARN,omitempty"`
+	StreamName               *string      `json:"streamName,omitempty"`
+}
+
+// Specifies configuration properties for a labeling set generation task run.
+type LabelingSetGenerationTaskRunProperties struct {
+	OutputS3Path *string `json:"outputS3Path,omitempty"`
+}
+
+// Specifies Lake Formation configuration settings for the crawler.
+type LakeFormationConfiguration struct {
+	UseLakeFormationCredentials *bool `json:"useLakeFormationCredentials,omitempty"`
+}
+
+// When there are multiple versions of a blueprint and the latest version has
+// some errors, this attribute indicates the last successful blueprint definition
+// that is available with the service.
+type LastActiveDefinition struct {
+	BlueprintLocation        *string      `json:"blueprintLocation,omitempty"`
+	BlueprintServiceLocation *string      `json:"blueprintServiceLocation,omitempty"`
+	Description              *string      `json:"description,omitempty"`
+	LastModifiedOn           *metav1.Time `json:"lastModifiedOn,omitempty"`
+}
+
+// Status and error information about the most recent crawl.
+type LastCrawlInfo struct {
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+}
+
+// A structure for a machine learning transform.
+type MLTransform struct {
+	Description     *string  `json:"description,omitempty"`
+	GlueVersion     *string  `json:"glueVersion,omitempty"`
+	MaxCapacity     *float64 `json:"maxCapacity,omitempty"`
+	MaxRetries      *int64   `json:"maxRetries,omitempty"`
+	Name            *string  `json:"name,omitempty"`
+	NumberOfWorkers *int64   `json:"numberOfWorkers,omitempty"`
+	Role            *string  `json:"role,omitempty"`
+	Timeout         *int64   `json:"timeout,omitempty"`
+	WorkerType      *string  `json:"workerType,omitempty"`
+}
+
+// The encryption-at-rest settings of the transform that apply to accessing
+// user data.
+type MLUserDataEncryption struct {
+	KMSKeyID *string `json:"kmsKeyID,omitempty"`
+}
+
+// Specifies the mapping of data property keys.
+type Mapping struct {
+	Dropped  *bool     `json:"dropped,omitempty"`
+	FromPath []*string `json:"fromPath,omitempty"`
+	FromType *string   `json:"fromType,omitempty"`
+	ToKey    *string   `json:"toKey,omitempty"`
+	ToType   *string   `json:"toType,omitempty"`
+}
+
+// Specifies a transform that merges a DynamicFrame with a staging DynamicFrame
+// based on the specified primary keys to identify records. Duplicate records
+// (records with the same primary keys) are not de-duplicated.
+type Merge struct {
+	Inputs      []*string   `json:"inputs,omitempty"`
+	Name        *string     `json:"name,omitempty"`
+	PrimaryKeys [][]*string `json:"primaryKeys,omitempty"`
+	Source      *string     `json:"source,omitempty"`
+}
+
+// Describes the metric based observation generated based on evaluated data
+// quality metrics.
+type MetricBasedObservation struct {
+	MetricName *string `json:"metricName,omitempty"`
+}
+
+// Specifies a Microsoft SQL server data source in the Glue Data Catalog.
+type MicrosoftSQLServerCatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies a target that uses Microsoft SQL.
+type MicrosoftSQLServerCatalogTarget struct {
+	Database *string   `json:"database,omitempty"`
+	Inputs   []*string `json:"inputs,omitempty"`
+	Name     *string   `json:"name,omitempty"`
+	Table    *string   `json:"table,omitempty"`
+}
+
+// Specifies an Amazon DocumentDB or MongoDB data store to crawl.
+type MongoDBTarget struct {
+	ScanAll *bool `json:"scanAll,omitempty"`
+}
+
+// Specifies a MySQL data source in the Glue Data Catalog.
+type MySQLCatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies a target that uses MySQL.
+type MySQLCatalogTarget struct {
+	Database *string   `json:"database,omitempty"`
+	Inputs   []*string `json:"inputs,omitempty"`
+	Name     *string   `json:"name,omitempty"`
+	Table    *string   `json:"table,omitempty"`
+}
+
+// A node represents an Glue component (trigger, crawler, or job) on a workflow
+// graph.
+type Node struct {
+	Name     *string `json:"name,omitempty"`
+	UniqueID *string `json:"uniqueID,omitempty"`
+}
+
+// Specifies configuration properties of a notification.
+type NotificationProperty struct {
+	NotifyDelayAfter *int64 `json:"notifyDelayAfter,omitempty"`
+}
+
+// Represents whether certain values are recognized as null values for removal.
+type NullCheckBoxList struct {
+	IsEmpty      *bool `json:"isEmpty,omitempty"`
+	IsNegOne     *bool `json:"isNegOne,omitempty"`
+	IsNullString *bool `json:"isNullString,omitempty"`
+}
+
+// Represents a custom null value such as a zeros or other value being used
+// as a null placeholder unique to the dataset.
+type NullValueField struct {
+	// A structure representing the datatype of the value.
+	Datatype *Datatype `json:"datatype,omitempty"`
+	Value    *string   `json:"value,omitempty"`
+}
+
+// Specifies an option value.
+type Option struct {
+	Description *string `json:"description,omitempty"`
+	Label       *string `json:"label,omitempty"`
+	Value       *string `json:"value,omitempty"`
+}
+
+// Specifies an Oracle data source in the Glue Data Catalog.
+type OracleSQLCatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies a target that uses Oracle SQL.
+type OracleSQLCatalogTarget struct {
+	Database *string   `json:"database,omitempty"`
+	Inputs   []*string `json:"inputs,omitempty"`
+	Name     *string   `json:"name,omitempty"`
+	Table    *string   `json:"table,omitempty"`
+}
+
+// Specifies the sort order of a sorted column.
+type Order struct {
+	Column *string `json:"column,omitempty"`
+}
+
+// Specifies a transform that identifies, removes or masks PII data.
+type PIIDetection struct {
+	EntityTypesToDetect []*string `json:"entityTypesToDetect,omitempty"`
+	Inputs              []*string `json:"inputs,omitempty"`
+	MaskValue           *string   `json:"maskValue,omitempty"`
+	Name                *string   `json:"name,omitempty"`
+	OutputColumnName    *string   `json:"outputColumnName,omitempty"`
+	PiiType             *string   `json:"piiType,omitempty"`
+	SampleFraction      *float64  `json:"sampleFraction,omitempty"`
+	ThresholdFraction   *float64  `json:"thresholdFraction,omitempty"`
+}
+
+// Represents a slice of table data.
+type Partition struct {
+	DatabaseName *string `json:"databaseName,omitempty"`
+	TableName    *string `json:"tableName,omitempty"`
+}
+
+// A structure for a partition index.
+type PartitionIndex struct {
+	IndexName *string `json:"indexName,omitempty"`
+}
+
+// A descriptor for a partition index in a table.
+type PartitionIndexDescriptor struct {
+	IndexName *string `json:"indexName,omitempty"`
+}
+
+// The OAuth client app in GetConnection response.
+type PhysicalConnectionRequirements struct {
+	AvailabilityZone *string `json:"availabilityZone,omitempty"`
+	SubnetID         *string `json:"subnetID,omitempty"`
+}
+
+// Specifies a PostgresSQL data source in the Glue Data Catalog.
+type PostgreSQLCatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies a target that uses Postgres SQL.
+type PostgreSQLCatalogTarget struct {
+	Database *string   `json:"database,omitempty"`
+	Inputs   []*string `json:"inputs,omitempty"`
+	Name     *string   `json:"name,omitempty"`
+	Table    *string   `json:"table,omitempty"`
+}
+
+// A job run that was used in the predicate of a conditional trigger that triggered
+// this job run.
+type Predecessor struct {
+	JobName *string `json:"jobName,omitempty"`
+}
+
+// A Glue Studio node that uses a Glue DataBrew recipe in Glue jobs.
+type Recipe struct {
+	Inputs []*string `json:"inputs,omitempty"`
+	Name   *string   `json:"name,omitempty"`
+	// A reference to a Glue DataBrew recipe.
+	RecipeReference *RecipeReference `json:"recipeReference,omitempty"`
+	RecipeSteps     []*RecipeStep    `json:"recipeSteps,omitempty"`
+}
+
+// Actions defined in the Glue Studio data preparation recipe node.
+type RecipeAction struct {
+	Operation  *string            `json:"operation,omitempty"`
+	Parameters map[string]*string `json:"parameters,omitempty"`
+}
+
+// A reference to a Glue DataBrew recipe.
+type RecipeReference struct {
+	RecipeARN     *string `json:"recipeARN,omitempty"`
+	RecipeVersion *string `json:"recipeVersion,omitempty"`
+}
+
+// A recipe step used in a Glue Studio data preparation recipe node.
+type RecipeStep struct {
+	// Actions defined in the Glue Studio data preparation recipe node.
+	Action               *RecipeAction          `json:"action,omitempty"`
+	ConditionExpressions []*ConditionExpression `json:"conditionExpressions,omitempty"`
+}
+
+// Specifies an Amazon Redshift data store.
+type RedshiftSource struct {
+	Database       *string `json:"database,omitempty"`
+	Name           *string `json:"name,omitempty"`
+	RedshiftTmpDir *string `json:"redshiftTmpDir,omitempty"`
+	Table          *string `json:"table,omitempty"`
+	TmpDirIAMRole  *string `json:"tmpDirIAMRole,omitempty"`
+}
+
+// Specifies a target that uses Amazon Redshift.
+type RedshiftTarget struct {
+	Database       *string   `json:"database,omitempty"`
+	Inputs         []*string `json:"inputs,omitempty"`
+	Name           *string   `json:"name,omitempty"`
+	RedshiftTmpDir *string   `json:"redshiftTmpDir,omitempty"`
+	Table          *string   `json:"table,omitempty"`
+	TmpDirIAMRole  *string   `json:"tmpDirIAMRole,omitempty"`
+	// The options to configure an upsert operation when writing to a Redshift target .
+	UpsertRedshiftOptions *UpsertRedshiftTargetOptions `json:"upsertRedshiftOptions,omitempty"`
+}
+
+// A structure containing the details for a registry.
+type RegistryListItem struct {
+	Description *string `json:"description,omitempty"`
+}
+
+// Specifies a Relational database data source in the Glue Data Catalog.
+type RelationalCatalogSource struct {
+	Database *string `json:"database,omitempty"`
+	Name     *string `json:"name,omitempty"`
+	Table    *string `json:"table,omitempty"`
+}
+
+// Specifies a transform that renames a single data property key.
+type RenameField struct {
+	Inputs     []*string `json:"inputs,omitempty"`
+	Name       *string   `json:"name,omitempty"`
+	SourcePath []*string `json:"sourcePath,omitempty"`
+	TargetPath []*string `json:"targetPath,omitempty"`
+}
+
+// Specifies a Delta Lake data source that is registered in the Glue Data Catalog.
+// The data source must be stored in Amazon S3.
+type S3CatalogDeltaSource struct {
+	AdditionalDeltaOptions map[string]*string `json:"additionalDeltaOptions,omitempty"`
+	Database               *string            `json:"database,omitempty"`
+	Name                   *string            `json:"name,omitempty"`
+	OutputSchemas          []*GlueSchema      `json:"outputSchemas,omitempty"`
+	Table                  *string            `json:"table,omitempty"`
+}
+
+// Specifies a Hudi data source that is registered in the Glue Data Catalog.
+// The Hudi data source must be stored in Amazon S3.
+type S3CatalogHudiSource struct {
+	AdditionalHudiOptions map[string]*string `json:"additionalHudiOptions,omitempty"`
+	Database              *string            `json:"database,omitempty"`
+	Name                  *string            `json:"name,omitempty"`
+	OutputSchemas         []*GlueSchema      `json:"outputSchemas,omitempty"`
+	Table                 *string            `json:"table,omitempty"`
+}
+
+// Specifies an Amazon S3 data store in the Glue Data Catalog.
+type S3CatalogSource struct {
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions  *S3SourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	Database           *string                    `json:"database,omitempty"`
+	Name               *string                    `json:"name,omitempty"`
+	PartitionPredicate *string                    `json:"partitionPredicate,omitempty"`
+	Table              *string                    `json:"table,omitempty"`
+}
+
+// Specifies a data target that writes to Amazon S3 using the Glue Data Catalog.
+type S3CatalogTarget struct {
+	Database      *string     `json:"database,omitempty"`
+	Inputs        []*string   `json:"inputs,omitempty"`
+	Name          *string     `json:"name,omitempty"`
+	PartitionKeys [][]*string `json:"partitionKeys,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *CatalogSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+	Table              *string                    `json:"table,omitempty"`
+}
+
+// Specifies a command-separated value (CSV) data store stored in Amazon S3.
+type S3CsvSource struct {
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions   *S3DirectSourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	CompressionType     *string                          `json:"compressionType,omitempty"`
+	Escaper             *string                          `json:"escaper,omitempty"`
+	Exclusions          []*string                        `json:"exclusions,omitempty"`
+	GroupFiles          *string                          `json:"groupFiles,omitempty"`
+	GroupSize           *string                          `json:"groupSize,omitempty"`
+	MaxBand             *int64                           `json:"maxBand,omitempty"`
+	MaxFilesInBand      *int64                           `json:"maxFilesInBand,omitempty"`
+	Multiline           *bool                            `json:"multiline,omitempty"`
+	Name                *string                          `json:"name,omitempty"`
+	OptimizePerformance *bool                            `json:"optimizePerformance,omitempty"`
+	OutputSchemas       []*GlueSchema                    `json:"outputSchemas,omitempty"`
+	Paths               []*string                        `json:"paths,omitempty"`
+	QuoteChar           *string                          `json:"quoteChar,omitempty"`
+	Recurse             *bool                            `json:"recurse,omitempty"`
+	Separator           *string                          `json:"separator,omitempty"`
+	SkipFirst           *bool                            `json:"skipFirst,omitempty"`
+	WithHeader          *bool                            `json:"withHeader,omitempty"`
+	WriteHeader         *bool                            `json:"writeHeader,omitempty"`
+}
+
+// Specifies a target that writes to a Delta Lake data source in the Glue Data
+// Catalog.
+type S3DeltaCatalogTarget struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	Database          *string            `json:"database,omitempty"`
+	Inputs            []*string          `json:"inputs,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	PartitionKeys     [][]*string        `json:"partitionKeys,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *CatalogSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+	Table              *string                    `json:"table,omitempty"`
+}
+
+// Specifies a target that writes to a Delta Lake data source in Amazon S3.
+type S3DeltaDirectTarget struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	Compression       *string            `json:"compression,omitempty"`
+	Format            *string            `json:"format,omitempty"`
+	Inputs            []*string          `json:"inputs,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	PartitionKeys     [][]*string        `json:"partitionKeys,omitempty"`
+	Path              *string            `json:"path,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *DirectSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+}
+
+// Specifies a Delta Lake data source stored in Amazon S3.
+type S3DeltaSource struct {
+	AdditionalDeltaOptions map[string]*string `json:"additionalDeltaOptions,omitempty"`
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	Name              *string                          `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema                    `json:"outputSchemas,omitempty"`
+	Paths             []*string                        `json:"paths,omitempty"`
+}
+
+// Specifies additional connection options for the Amazon S3 data store.
+type S3DirectSourceAdditionalOptions struct {
+	BoundedFiles     *int64  `json:"boundedFiles,omitempty"`
+	BoundedSize      *int64  `json:"boundedSize,omitempty"`
+	EnableSamplePath *bool   `json:"enableSamplePath,omitempty"`
+	SamplePath       *string `json:"samplePath,omitempty"`
+}
+
+// Specifies a data target that writes to Amazon S3.
+type S3DirectTarget struct {
+	Compression   *string     `json:"compression,omitempty"`
+	Format        *string     `json:"format,omitempty"`
+	Inputs        []*string   `json:"inputs,omitempty"`
+	Name          *string     `json:"name,omitempty"`
+	PartitionKeys [][]*string `json:"partitionKeys,omitempty"`
+	Path          *string     `json:"path,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *DirectSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+}
+
+// Specifies a data target that writes to Amazon S3 in Apache Parquet columnar
+// storage.
+type S3GlueParquetTarget struct {
+	Compression   *string     `json:"compression,omitempty"`
+	Inputs        []*string   `json:"inputs,omitempty"`
+	Name          *string     `json:"name,omitempty"`
+	PartitionKeys [][]*string `json:"partitionKeys,omitempty"`
+	Path          *string     `json:"path,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *DirectSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+}
+
+// Specifies a target that writes to a Hudi data source in the Glue Data Catalog.
+type S3HudiCatalogTarget struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	Database          *string            `json:"database,omitempty"`
+	Inputs            []*string          `json:"inputs,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	PartitionKeys     [][]*string        `json:"partitionKeys,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *CatalogSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+	Table              *string                    `json:"table,omitempty"`
+}
+
+// Specifies a target that writes to a Hudi data source in Amazon S3.
+type S3HudiDirectTarget struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	Compression       *string            `json:"compression,omitempty"`
+	Format            *string            `json:"format,omitempty"`
+	Inputs            []*string          `json:"inputs,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	PartitionKeys     [][]*string        `json:"partitionKeys,omitempty"`
+	Path              *string            `json:"path,omitempty"`
+	// A policy that specifies update behavior for the crawler.
+	SchemaChangePolicy *DirectSchemaChangePolicy `json:"schemaChangePolicy,omitempty"`
+}
+
+// Specifies a Hudi data source stored in Amazon S3.
+type S3HudiSource struct {
+	AdditionalHudiOptions map[string]*string `json:"additionalHudiOptions,omitempty"`
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	Name              *string                          `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema                    `json:"outputSchemas,omitempty"`
+	Paths             []*string                        `json:"paths,omitempty"`
+}
+
+// Specifies a JSON data store stored in Amazon S3.
+type S3JSONSource struct {
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	CompressionType   *string                          `json:"compressionType,omitempty"`
+	Exclusions        []*string                        `json:"exclusions,omitempty"`
+	GroupFiles        *string                          `json:"groupFiles,omitempty"`
+	GroupSize         *string                          `json:"groupSize,omitempty"`
+	JSONPath          *string                          `json:"jsonPath,omitempty"`
+	MaxBand           *int64                           `json:"maxBand,omitempty"`
+	MaxFilesInBand    *int64                           `json:"maxFilesInBand,omitempty"`
+	Multiline         *bool                            `json:"multiline,omitempty"`
+	Name              *string                          `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema                    `json:"outputSchemas,omitempty"`
+	Paths             []*string                        `json:"paths,omitempty"`
+	Recurse           *bool                            `json:"recurse,omitempty"`
+}
+
+// Specifies an Apache Parquet data store stored in Amazon S3.
+type S3ParquetSource struct {
+	// Specifies additional connection options for the Amazon S3 data store.
+	AdditionalOptions *S3DirectSourceAdditionalOptions `json:"additionalOptions,omitempty"`
+	CompressionType   *string                          `json:"compressionType,omitempty"`
+	Exclusions        []*string                        `json:"exclusions,omitempty"`
+	GroupFiles        *string                          `json:"groupFiles,omitempty"`
+	GroupSize         *string                          `json:"groupSize,omitempty"`
+	MaxBand           *int64                           `json:"maxBand,omitempty"`
+	MaxFilesInBand    *int64                           `json:"maxFilesInBand,omitempty"`
+	Name              *string                          `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema                    `json:"outputSchemas,omitempty"`
+	Paths             []*string                        `json:"paths,omitempty"`
+	Recurse           *bool                            `json:"recurse,omitempty"`
+}
+
+// Specifies additional connection options for the Amazon S3 data store.
+type S3SourceAdditionalOptions struct {
+	BoundedFiles *int64 `json:"boundedFiles,omitempty"`
+	BoundedSize  *int64 `json:"boundedSize,omitempty"`
+}
+
+// Specifies a data store in Amazon Simple Storage Service (Amazon S3).
+type S3Target struct {
+	SampleSize *int64 `json:"sampleSize,omitempty"`
+}
+
+// Represents a single entry in the list of values for SqlAliases.
+type SQLAlias struct {
+	Alias *string `json:"alias,omitempty"`
+	From  *string `json:"from,omitempty"`
+}
+
+// A key-value pair representing a column and data type that this transform
+// can run against. The Schema parameter of the MLTransform may contain up to
+// 100 of these structures.
+type SchemaColumn struct {
+	DataType *string `json:"dataType,omitempty"`
+}
+
+// An object that contains minimal details for a schema.
+type SchemaListItem struct {
+	Description *string `json:"description,omitempty"`
+}
+
+// Specifies a security configuration.
+type SecurityConfiguration struct {
+	CreatedTimeStamp *metav1.Time `json:"createdTimeStamp,omitempty"`
+	Name             *string      `json:"name,omitempty"`
+}
+
+// Specifies a transform that chooses the data property keys that you want to
+// keep.
+type SelectFields struct {
+	Inputs []*string   `json:"inputs,omitempty"`
+	Name   *string     `json:"name,omitempty"`
+	Paths  [][]*string `json:"paths,omitempty"`
+}
+
+// Specifies a transform that chooses one DynamicFrame from a collection of
+// DynamicFrames. The output is the selected DynamicFrame
+type SelectFromCollection struct {
+	Index  *int64    `json:"index,omitempty"`
+	Inputs []*string `json:"inputs,omitempty"`
+	Name   *string   `json:"name,omitempty"`
+}
+
+// Information about a serialization/deserialization program (SerDe) that serves
+// as an extractor and loader.
+type SerDeInfo struct {
+	Name                 *string `json:"name,omitempty"`
+	SerializationLibrary *string `json:"serializationLibrary,omitempty"`
+}
+
+// The period in which a remote Spark runtime environment is running.
+type Session struct {
+	CompletedOn *metav1.Time `json:"completedOn,omitempty"`
+	// Specifies the connections used by a job.
+	Connections           *ConnectionsList `json:"connections,omitempty"`
+	CreatedOn             *metav1.Time     `json:"createdOn,omitempty"`
+	DPUSeconds            *float64         `json:"dPUSeconds,omitempty"`
+	Description           *string          `json:"description,omitempty"`
+	ErrorMessage          *string          `json:"errorMessage,omitempty"`
+	ExecutionTime         *float64         `json:"executionTime,omitempty"`
+	GlueVersion           *string          `json:"glueVersion,omitempty"`
+	ID                    *string          `json:"id,omitempty"`
+	MaxCapacity           *float64         `json:"maxCapacity,omitempty"`
+	NumberOfWorkers       *int64           `json:"numberOfWorkers,omitempty"`
+	ProfileName           *string          `json:"profileName,omitempty"`
+	SecurityConfiguration *string          `json:"securityConfiguration,omitempty"`
+	WorkerType            *string          `json:"workerType,omitempty"`
+}
+
+// The SessionCommand that runs the job.
+type SessionCommand struct {
+	Name          *string `json:"name,omitempty"`
+	PythonVersion *string `json:"pythonVersion,omitempty"`
+}
+
+// Specifies configuration for Snowflake nodes in Glue Studio.
+type SnowflakeNodeData struct {
+	Action            *string            `json:"action,omitempty"`
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	AutoPushdown      *bool              `json:"autoPushdown,omitempty"`
+	// Specifies an option value.
+	Connection *Option `json:"connection,omitempty"`
+	Database   *string `json:"database,omitempty"`
+	// Specifies an option value.
+	IAMRole             *Option   `json:"iamRole,omitempty"`
+	MergeAction         *string   `json:"mergeAction,omitempty"`
+	MergeClause         *string   `json:"mergeClause,omitempty"`
+	MergeWhenMatched    *string   `json:"mergeWhenMatched,omitempty"`
+	MergeWhenNotMatched *string   `json:"mergeWhenNotMatched,omitempty"`
+	PostAction          *string   `json:"postAction,omitempty"`
+	PreAction           *string   `json:"preAction,omitempty"`
+	SampleQuery         *string   `json:"sampleQuery,omitempty"`
+	Schema              *string   `json:"schema,omitempty"`
+	SelectedColumns     []*Option `json:"selectedColumns,omitempty"`
+	SourceType          *string   `json:"sourceType,omitempty"`
+	StagingTable        *string   `json:"stagingTable,omitempty"`
+	Table               *string   `json:"table,omitempty"`
+	TableSchema         []*Option `json:"tableSchema,omitempty"`
+	TempDir             *string   `json:"tempDir,omitempty"`
+	Upsert              *bool     `json:"upsert,omitempty"`
+}
+
+// Specifies a Snowflake data source.
+type SnowflakeSource struct {
+	// Specifies configuration for Snowflake nodes in Glue Studio.
+	Data          *SnowflakeNodeData `json:"data,omitempty"`
+	Name          *string            `json:"name,omitempty"`
+	OutputSchemas []*GlueSchema      `json:"outputSchemas,omitempty"`
+}
+
+// Specifies a Snowflake target.
+type SnowflakeTarget struct {
+	// Specifies configuration for Snowflake nodes in Glue Studio.
+	Data   *SnowflakeNodeData `json:"data,omitempty"`
+	Inputs []*string          `json:"inputs,omitempty"`
+	Name   *string            `json:"name,omitempty"`
+}
+
+// The details for a source control configuration for a job, allowing synchronization
+// of job artifacts to or from a remote repository.
+type SourceControlDetails struct {
+	AuthStrategy *string `json:"authStrategy,omitempty"`
+	AuthToken    *string `json:"authToken,omitempty"`
+	Branch       *string `json:"branch,omitempty"`
+	Folder       *string `json:"folder,omitempty"`
+	LastCommitID *string `json:"lastCommitID,omitempty"`
+	Owner        *string `json:"owner,omitempty"`
+	Provider     *string `json:"provider,omitempty"`
+	Repository   *string `json:"repository,omitempty"`
+}
+
+// Specifies a connector to an Apache Spark data source.
+type SparkConnectorSource struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	ConnectionName    *string            `json:"connectionName,omitempty"`
+	ConnectionType    *string            `json:"connectionType,omitempty"`
+	ConnectorName     *string            `json:"connectorName,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema      `json:"outputSchemas,omitempty"`
+}
+
+// Specifies a target that uses an Apache Spark connector.
+type SparkConnectorTarget struct {
+	AdditionalOptions map[string]*string `json:"additionalOptions,omitempty"`
+	ConnectionName    *string            `json:"connectionName,omitempty"`
+	ConnectionType    *string            `json:"connectionType,omitempty"`
+	ConnectorName     *string            `json:"connectorName,omitempty"`
+	Inputs            []*string          `json:"inputs,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	OutputSchemas     []*GlueSchema      `json:"outputSchemas,omitempty"`
+}
+
+// Specifies a transform where you enter a SQL query using Spark SQL syntax
+// to transform the data. The output is a single DynamicFrame.
+type SparkSQL struct {
+	Inputs        []*string     `json:"inputs,omitempty"`
+	Name          *string       `json:"name,omitempty"`
+	OutputSchemas []*GlueSchema `json:"outputSchemas,omitempty"`
+	SQLAliases    []*SQLAlias   `json:"sqlAliases,omitempty"`
+	SQLQuery      *string       `json:"sqlQuery,omitempty"`
+}
+
+// Specifies a transform that writes samples of the data to an Amazon S3 bucket.
+type Spigot struct {
+	Inputs []*string `json:"inputs,omitempty"`
+	Name   *string   `json:"name,omitempty"`
+	Path   *string   `json:"path,omitempty"`
+	Prob   *float64  `json:"prob,omitempty"`
+	Topk   *int64    `json:"topk,omitempty"`
+}
+
+// Specifies a transform that splits data property keys into two DynamicFrames.
+// The output is a collection of DynamicFrames: one with selected data property
+// keys, and one with the remaining data property keys.
+type SplitFields struct {
+	Inputs []*string   `json:"inputs,omitempty"`
+	Name   *string     `json:"name,omitempty"`
+	Paths  [][]*string `json:"paths,omitempty"`
+}
+
+// The batch condition that started the workflow run. Either the number of events
+// in the batch size arrived, in which case the BatchSize member is non-zero,
+// or the batch window expired, in which case the BatchWindow member is non-zero.
+type StartingEventBatchCondition struct {
+	BatchSize   *int64 `json:"batchSize,omitempty"`
+	BatchWindow *int64 `json:"batchWindow,omitempty"`
+}
+
+// The statement or request for a particular action to occur in a session.
+type Statement struct {
+	Code *string `json:"code,omitempty"`
+	ID   *int64  `json:"id,omitempty"`
+}
+
+// The code execution output in JSON format.
+type StatementOutput struct {
+	ErrorName      *string   `json:"errorName,omitempty"`
+	ErrorValue     *string   `json:"errorValue,omitempty"`
+	ExecutionCount *int64    `json:"executionCount,omitempty"`
+	Traceback      []*string `json:"traceback,omitempty"`
+}
+
+// The code execution output in JSON format.
+type StatementOutputData struct {
+	TextPlain *string `json:"textPlain,omitempty"`
+}
+
+// The statistic model result.
+type StatisticModelResult struct {
+	ActualValue    *float64 `json:"actualValue,omitempty"`
+	LowerBound     *float64 `json:"lowerBound,omitempty"`
+	PredictedValue *float64 `json:"predictedValue,omitempty"`
+	UpperBound     *float64 `json:"upperBound,omitempty"`
+}
+
+// Specifies options related to data preview for viewing a sample of your data.
+type StreamingDataPreviewOptions struct {
+	PollingTime        *int64 `json:"pollingTime,omitempty"`
+	RecordPollingLimit *int64 `json:"recordPollingLimit,omitempty"`
+}
+
+// The database and table in the Glue Data Catalog that is used for input or
+// output data.
+type Table struct {
+	CatalogID      *string `json:"catalogID,omitempty"`
+	ConnectionName *string `json:"connectionName,omitempty"`
+	DatabaseName   *string `json:"databaseName,omitempty"`
+	TableName      *string `json:"tableName,omitempty"`
+}
+
+// Represents a collection of related data organized in columns and rows.
+type TableData struct {
+	CreatedBy          *string `json:"createdBy,omitempty"`
+	DatabaseName       *string `json:"databaseName,omitempty"`
+	Description        *string `json:"description,omitempty"`
+	IsMultiDialectView *bool   `json:"isMultiDialectView,omitempty"`
+	Name               *string `json:"name,omitempty"`
+	Owner              *string `json:"owner,omitempty"`
+}
+
+// An error record for table operations.
+type TableError struct {
+	TableName *string `json:"tableName,omitempty"`
+}
+
+// A structure that describes a target table for resource linking.
+type TableIdentifier struct {
+	DatabaseName *string `json:"databaseName,omitempty"`
+	Name         *string `json:"name,omitempty"`
+	Region       *string `json:"region,omitempty"`
+}
+
+// A structure used to define a table.
+type TableInput struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Owner       *string `json:"owner,omitempty"`
+}
+
+// Contains details on the configuration of a table optimizer. You pass this
+// configuration when creating or updating a table optimizer.
+type TableOptimizerConfiguration struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// A structure containing information about the state of an asynchronous change
+// to a table.
+type TableStatus struct {
+	RequestedBy *string `json:"requestedBy,omitempty"`
+	UpdatedBy   *string `json:"updatedBy,omitempty"`
+}
+
+// An error record for table-version operations.
+type TableVersionError struct {
+	TableName *string `json:"tableName,omitempty"`
+}
+
+// The sampling parameters that are associated with the machine learning transform.
+type TaskRun struct {
+	ErrorString  *string `json:"errorString,omitempty"`
+	LogGroupName *string `json:"logGroupName,omitempty"`
+}
+
+// Specifies the parameters in the config file of the dynamic transform.
+type TransformConfigParameter struct {
+	IsOptional        *bool     `json:"isOptional,omitempty"`
+	ListType          *string   `json:"listType,omitempty"`
+	Name              *string   `json:"name,omitempty"`
+	Type              *string   `json:"type,omitempty"`
+	ValidationMessage *string   `json:"validationMessage,omitempty"`
+	ValidationRule    *string   `json:"validationRule,omitempty"`
+	Value             []*string `json:"value,omitempty"`
+}
+
+// The encryption-at-rest settings of the transform that apply to accessing
+// user data. Machine learning transforms can access user data encrypted in
+// Amazon S3 using KMS.
+//
+// Additionally, imported labels and trained transforms can now be encrypted
+// using a customer provided KMS key.
+type TransformEncryption struct {
+	TaskRunSecurityConfigurationName *string `json:"taskRunSecurityConfigurationName,omitempty"`
+}
+
+// The criteria used to filter the machine learning transforms.
+type TransformFilterCriteria struct {
+	GlueVersion *string `json:"glueVersion,omitempty"`
+	Name        *string `json:"name,omitempty"`
+}
+
+// Information about a specific trigger.
+type Trigger struct {
+	Description  *string `json:"description,omitempty"`
+	Name         *string `json:"name,omitempty"`
+	Schedule     *string `json:"schedule,omitempty"`
+	WorkflowName *string `json:"workflowName,omitempty"`
+}
+
+// A structure used to provide information used to update a trigger. This object
+// updates the previous trigger definition by overwriting it completely.
+type TriggerUpdate struct {
+	Description *string `json:"description,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Schedule    *string `json:"schedule,omitempty"`
+}
+
+// Specifies a transform that combines the rows from two or more datasets into
+// a single result.
+type Union struct {
+	Inputs    []*string `json:"inputs,omitempty"`
+	Name      *string   `json:"name,omitempty"`
+	UnionType *string   `json:"unionType,omitempty"`
+}
+
+// Specifies a custom CSV classifier to be updated.
+type UpdateCsvClassifierRequest struct {
+	AllowSingleColumn        *bool   `json:"allowSingleColumn,omitempty"`
+	CustomDatatypeConfigured *bool   `json:"customDatatypeConfigured,omitempty"`
+	DisableValueTrimming     *bool   `json:"disableValueTrimming,omitempty"`
+	Name                     *string `json:"name,omitempty"`
+}
+
+// Specifies a grok classifier to update when passed to UpdateClassifier.
+type UpdateGrokClassifierRequest struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Specifies a JSON classifier to be updated.
+type UpdateJSONClassifierRequest struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// Specifies an XML classifier to be updated.
+type UpdateXMLClassifierRequest struct {
+	Name *string `json:"name,omitempty"`
+}
+
+// The options to configure an upsert operation when writing to a Redshift target .
+type UpsertRedshiftTargetOptions struct {
+	ConnectionName *string   `json:"connectionName,omitempty"`
+	TableLocation  *string   `json:"tableLocation,omitempty"`
+	UpsertKeys     []*string `json:"upsertKeys,omitempty"`
+}
+
+// Describes an Glue usage profile.
+type UsageProfileDefinition struct {
+	CreatedOn      *metav1.Time `json:"createdOn,omitempty"`
+	Description    *string      `json:"description,omitempty"`
+	LastModifiedOn *metav1.Time `json:"lastModifiedOn,omitempty"`
+	Name           *string      `json:"name,omitempty"`
+}
+
+// Represents the equivalent of a Hive user-defined function (UDF) definition.
+type UserDefinedFunction struct {
+	ClassName    *string `json:"className,omitempty"`
+	DatabaseName *string `json:"databaseName,omitempty"`
+	FunctionName *string `json:"functionName,omitempty"`
+	OwnerName    *string `json:"ownerName,omitempty"`
+}
+
+// A structure used to create or update a user-defined function.
+type UserDefinedFunctionInput struct {
+	ClassName    *string `json:"className,omitempty"`
+	FunctionName *string `json:"functionName,omitempty"`
+	OwnerName    *string `json:"ownerName,omitempty"`
+}
+
+// A structure containing details for representations.
+type ViewDefinition struct {
+	IsProtected *bool `json:"isProtected,omitempty"`
+}
+
+// A structure containing details for creating or updating an Glue view.
+type ViewDefinitionInput struct {
+	IsProtected *bool `json:"isProtected,omitempty"`
+}
+
+// A structure that contains the dialect of the view, and the query that defines
+// the view.
+type ViewRepresentation struct {
+	IsStale              *bool   `json:"isStale,omitempty"`
+	ValidationConnection *string `json:"validationConnection,omitempty"`
+}
+
+// A structure containing details of a representation to update or create a
+// Lake Formation view.
+type ViewRepresentationInput struct {
+	ValidationConnection *string `json:"validationConnection,omitempty"`
+}
+
+// A workflow is a collection of multiple dependent Glue jobs and crawlers that
+// are run to complete a complex ETL task. A workflow manages the execution
+// and monitoring of all its jobs and crawlers.
+type Workflow struct {
+	CreatedOn         *metav1.Time `json:"createdOn,omitempty"`
+	Description       *string      `json:"description,omitempty"`
+	LastModifiedOn    *metav1.Time `json:"lastModifiedOn,omitempty"`
+	MaxConcurrentRuns *int64       `json:"maxConcurrentRuns,omitempty"`
+	Name              *string      `json:"name,omitempty"`
+}
+
+// A workflow run is an execution of a workflow providing all the runtime information.
+type WorkflowRun struct {
+	CompletedOn *metav1.Time `json:"completedOn,omitempty"`
+	Name        *string      `json:"name,omitempty"`
+	StartedOn   *metav1.Time `json:"startedOn,omitempty"`
+}
+
+// Workflow run statistics provides statistics about the workflow run.
+type WorkflowRunStatistics struct {
+	ErroredActions   *int64 `json:"erroredActions,omitempty"`
+	FailedActions    *int64 `json:"failedActions,omitempty"`
+	RunningActions   *int64 `json:"runningActions,omitempty"`
+	StoppedActions   *int64 `json:"stoppedActions,omitempty"`
+	SucceededActions *int64 `json:"succeededActions,omitempty"`
+	TimeoutActions   *int64 `json:"timeoutActions,omitempty"`
+	TotalActions     *int64 `json:"totalActions,omitempty"`
+	WaitingActions   *int64 `json:"waitingActions,omitempty"`
+}
+
+// A classifier for XML content.
+type XMLClassifier struct {
+	Name *string `json:"name,omitempty"`
+}

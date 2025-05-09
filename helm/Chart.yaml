@@ -1,6 +1,6 @@
 apiVersion: v1
 name: glue-chart
-description: A Helm chart for the ACK service controller for  ()
+description: A Helm chart for the ACK service controller for AWS Glue (Glue)
 version: 0.0.0-non-release-version
 appVersion: 0.0.0-non-release-version
 home: https://github.com/aws-controllers-k8s/glue-controller
@@ -10,7 +10,7 @@ sources:
 maintainers:
   - name: ACK Admins
     url: https://github.com/orgs/aws-controllers-k8s/teams/ack-admin
-  - name:  Admins
+  - name: Glue Admins
     url: https://github.com/orgs/aws-controllers-k8s/teams/glue-maintainer
 keywords:
   - aws

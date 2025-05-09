@@ -1,6 +1,7 @@
 ignore:
   resource_names:
       - Blueprint
+      - Catalog
       - Classifier
       - Connection
       - Crawler
@@ -8,7 +9,9 @@ ignore:
       - DataQualityRuleset
       - Database
       - DevEndpoint
-      - Job
+      - Integration
+      - IntegrationResourceProperty
+      # - Job
       - MLTransform
       - Partition
       - PartitionIndex
@@ -23,4 +26,51 @@ ignore:
       - UsageProfile
       - UserDefinedFunction
       - Workflow
-model_name: glue
+  field_paths:
+      - Mapping.Children
+      - CreateJobInput.AllocatedCapacity
+      - UpdateJobInput.JobUpdate.AllocatedCapacity
+resources:
+  Job:
+    renames:
+      operations:
+        GetJob:
+          input_fields:
+            JobName: Name
+        UpdateJob:
+          input_fields:
+            JobName: Name
+        DeleteJob:
+          input_fields:
+            JobName: Name
+    fields:
+      CodeGenConfigurationNodes.DynamicTransform.OutputSchemas.Columns.Type:
+        go_tag: json:"type,omitempty"
+      CodeGenConfigurationNodes.Filter.Filters.Values.Type:
+        go_tag: json:"type,omitempty"
+      CodeGenConfigurationNodes.DynamicTransform.Parameters.Type:
+        go_tag: json:"type,omitempty"
+      Role:
+        references:
+          service_name: iam
+          resource: Role
+          path: Status.ACKResourceMetadata.ARN
+      Tags:
+        type: map[string]*string
+    hooks:
+      sdk_update_pre_build_request:
+        template_path: hooks/job/sdk_update_pre_build_request.go.tpl
+      sdk_update_post_build_request:
+        template_path: hooks/job/sdk_update_post_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/job/sdk_read_one_post_set_output.go.tpl
+      sdk_file_end:
+        template_path: hooks/job/sdk_file_end.go.tpl
+    exceptions:
+      terminal_codes:
+        - InvalidInputException
+      errors:
+        404: 
+         code: EntityNotFoundException
+
+      

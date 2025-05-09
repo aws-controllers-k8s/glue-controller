@@ -16,8 +16,10 @@
 package main
 
 import (
+	"context"
 	"os"
 
+	iamapitypes "github.com/aws-controllers-k8s/iam-controller/apis/v1alpha1"
 	ackv1alpha1 "github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1"
 	ackcfg "github.com/aws-controllers-k8s/runtime/pkg/config"
 	ackrt "github.com/aws-controllers-k8s/runtime/pkg/runtime"
@@ -37,17 +39,17 @@ import (
 
 	svctypes "github.com/aws-controllers-k8s/glue-controller/apis/v1alpha1"
 	svcresource "github.com/aws-controllers-k8s/glue-controller/pkg/resource"
-	svcsdk "github.com/aws/aws-sdk-go/service/glue"
+
+	_ "github.com/aws-controllers-k8s/glue-controller/pkg/resource/job"
 
 	"github.com/aws-controllers-k8s/glue-controller/pkg/version"
 )
 
 var (
-	awsServiceAPIGroup    = "glue.services.k8s.aws"
-	awsServiceAlias       = "glue"
-	awsServiceEndpointsID = svcsdk.EndpointsID
-	scheme                = runtime.NewScheme()
-	setupLog              = ctrlrt.Log.WithName("setup")
+	awsServiceAPIGroup = "glue.services.k8s.aws"
+	awsServiceAlias    = "glue"
+	scheme             = runtime.NewScheme()
+	setupLog           = ctrlrt.Log.WithName("setup")
 )
 
 func init() {
@@ -55,6 +57,7 @@ func init() {
 
 	_ = svctypes.AddToScheme(scheme)
 	_ = ackv1alpha1.AddToScheme(scheme)
+	_ = iamapitypes.AddToScheme(scheme)
 }
 
 func main() {
@@ -69,7 +72,8 @@ func main() {
 		resourceGVKs = append(resourceGVKs, mf.ResourceDescriptor().GroupVersionKind())
 	}
 
-	if err := ackCfg.Validate(ackcfg.WithGVKs(resourceGVKs)); err != nil {
+	ctx := context.Background()
+	if err := ackCfg.Validate(ctx, ackcfg.WithGVKs(resourceGVKs)); err != nil {
 		setupLog.Error(
 			err, "Unable to create controller manager",
 			"aws.service", awsServiceAlias,
@@ -99,11 +103,20 @@ func main() {
 	for _, namespace := range namespaces {
 		watchNamespaces[namespace] = ctrlrtcache.Config{}
 	}
+	watchSelectors, err := ackCfg.ParseWatchSelectors()
+	if err != nil {
+		setupLog.Error(
+			err, "Unable to parse watch selectors.",
+			"aws.service", awsServiceAlias,
+		)
+		os.Exit(1)
+	}
 	mgr, err := ctrlrt.NewManager(ctrlrt.GetConfigOrDie(), ctrlrt.Options{
 		Scheme: scheme,
 		Cache: ctrlrtcache.Options{
-			Scheme:            scheme,
-			DefaultNamespaces: watchNamespaces,
+			Scheme:               scheme,
+			DefaultNamespaces:    watchNamespaces,
+			DefaultLabelSelector: watchSelectors,
 		},
 		WebhookServer: &ctrlrtwebhook.DefaultServer{
 			Options: ctrlrtwebhook.Options{
@@ -134,7 +147,7 @@ func main() {
 		"aws.service", awsServiceAlias,
 	)
 	sc := ackrt.NewServiceController(
-		awsServiceAlias, awsServiceAPIGroup, awsServiceEndpointsID,
+		awsServiceAlias, awsServiceAPIGroup,
 		acktypes.VersionInfo{
 			version.GitCommit,
 			version.GitVersion,

@@ -41,6 +41,9 @@ deployment:
   # To have DNS options set along with hostNetwork, you have to specify DNS policy
   # explicitly to 'ClusterFirstWithHostNet'.
   dnsPolicy: ClusterFirst
+  # Set rollout strategy for deployment.
+  # See: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+  strategy: {}
   extraVolumes: []
   extraVolumeMounts: []
 
@@ -110,6 +113,10 @@ installScope: cluster
 # You can set multiple namespaces by providing a comma separated list of namespaces. e.g "namespace1,namespace2"
 watchNamespace: ""
 
+# Set the value of labelsSelectors to be used by the controller to filter the resources to watch.
+# You can set multiple labelsSelectors by providing a comma separated list of a=b arguments. e.g "label1=value1,label2=value2" 
+watchSelectors: ""
+
 resourceTags:
   # Configures the ACK service controller to always set key/value pairs tags on
   # resources that it manages.
@@ -133,6 +140,12 @@ reconcile:
   # An object representing the reconcile max concurrent syncs configuration for each specific
   # resource.
   resourceMaxConcurrentSyncs: {}
+  
+  # Set the value of resources to specify which resource kinds to reconcile.
+  # If empty, all resources will be reconciled.
+  # If specified, only the listed resource kinds will be reconciled.
+  resources:
+    - Job
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -157,6 +170,12 @@ leaderElection:
 # Configuration for feature gates.  These are optional controller features that
 # can be individually enabled ("true") or disabled ("false") by adding key/value
 # pairs below.
-featureGates: {}
-  # featureGate1: true
-  # featureGate2: false
+featureGates:
+  # Enables the Service level granularity for CARM. See https://github.com/aws-controllers-k8s/community/issues/2031
+  ServiceLevelCARM: false
+  # Enables the Team level granularity for CARM. See https://github.com/aws-controllers-k8s/community/issues/2031
+  TeamLevelCARM: false
+  # Enable ReadOnlyResources feature/annotation. 
+  ReadOnlyResources: false
+  # Enable ResourceAdoption feature/annotation. 
+  ResourceAdoption: false

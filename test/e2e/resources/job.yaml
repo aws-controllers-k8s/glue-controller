@@ -1,0 +1,12 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Job
+metadata:
+  name: $JOB_NAME
+spec:
+  name: $JOB_NAME
+  command:
+    name: gluestreaming
+    scriptLocation: $JOB_SCRIPT_LOCATION
+  role: $JOB_ROLE
+  tags:
+    key: val

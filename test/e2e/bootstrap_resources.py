@@ -18,10 +18,13 @@ for them.
 from dataclasses import dataclass
 from acktest.bootstrapping import Resources
 from e2e import bootstrap_directory
+from acktest.bootstrapping.s3 import Bucket
+from acktest.bootstrapping.iam import Role
 
 @dataclass
 class BootstrapResources(Resources):
-    pass
+    JobBucket: Bucket
+    JobRole: Role
 
 _bootstrap_resources = None
 
