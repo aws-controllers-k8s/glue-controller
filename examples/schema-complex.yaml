@@ -1,0 +1,101 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: complex-order-schema
+spec:
+  schemaName: complex-order-schema
+  dataFormat: AVRO
+  compatibility: BACKWARD_ALL
+  description: "Complex order schema with nested structures"
+  tags:
+    Domain: "Orders"
+    Version: "v2"
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "Order",
+      "namespace": "com.example.orders.v2",
+      "doc": "Complete order with customer and line items",
+      "fields": [
+        {
+          "name": "order_id",
+          "type": "string",
+          "doc": "Unique order identifier"
+        },
+        {
+          "name": "customer",
+          "type": {
+            "type": "record",
+            "name": "Customer",
+            "fields": [
+              {"name": "customer_id", "type": "string"},
+              {"name": "name", "type": "string"},
+              {"name": "email", "type": "string"},
+              {
+                "name": "address",
+                "type": {
+                  "type": "record",
+                  "name": "Address",
+                  "fields": [
+                    {"name": "street", "type": "string"},
+                    {"name": "city", "type": "string"},
+                    {"name": "state", "type": "string"},
+                    {"name": "zip_code", "type": "string"},
+                    {"name": "country", "type": "string", "default": "US"}
+                  ]
+                }
+              }
+            ]
+          },
+          "doc": "Customer information"
+        },
+        {
+          "name": "items",
+          "type": {
+            "type": "array",
+            "items": {
+              "type": "record",
+              "name": "LineItem",
+              "fields": [
+                {"name": "product_id", "type": "string"},
+                {"name": "product_name", "type": "string"},
+                {"name": "quantity", "type": "int"},
+                {"name": "unit_price", "type": "double"},
+                {"name": "discount", "type": ["null", "double"], "default": null}
+              ]
+            }
+          },
+          "doc": "Order line items"
+        },
+        {
+          "name": "total",
+          "type": "double",
+          "doc": "Order total amount"
+        },
+        {
+          "name": "status",
+          "type": {
+            "type": "enum",
+            "name": "OrderStatus",
+            "symbols": ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"]
+          },
+          "doc": "Current order status"
+        },
+        {
+          "name": "payment_method",
+          "type": ["null", "string"],
+          "default": null,
+          "doc": "Payment method used"
+        },
+        {
+          "name": "created_at",
+          "type": "long",
+          "doc": "Order creation timestamp"
+        },
+        {
+          "name": "updated_at",
+          "type": "long",
+          "doc": "Last update timestamp"
+        }
+      ]
+    }

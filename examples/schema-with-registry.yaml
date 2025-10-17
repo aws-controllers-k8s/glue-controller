@@ -1,0 +1,28 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: order-schema
+spec:
+  schemaName: order-schema
+  dataFormat: AVRO
+  compatibility: BACKWARD
+  description: "Order schema with custom registry"
+  registryRef:
+    name: my-custom-registry
+  tags:
+    Environment: "Production"
+    Team: "DataEngineering"
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "Order",
+      "namespace": "com.example.orders",
+      "fields": [
+        {"name": "order_id", "type": "string"},
+        {"name": "customer_id", "type": "string"},
+        {"name": "items", "type": {"type": "array", "items": "string"}},
+        {"name": "total", "type": "double"},
+        {"name": "status", "type": {"type": "enum", "name": "OrderStatus", "symbols": ["PENDING", "CONFIRMED", "SHIPPED", "DELIVERED"]}},
+        {"name": "created_at", "type": "long"}
+      ]
+    }

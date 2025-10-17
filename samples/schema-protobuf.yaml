@@ -1,0 +1,86 @@
+---
+# Example: Protobuf Schema for order processing events
+# Demonstrates Protocol Buffers data format with strict compatibility
+
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: order-events-protobuf
+  namespace: default
+  labels:
+    app: order-service
+    format: protobuf
+spec:
+  schemaName: order-events
+
+  # Reference to the Registry CRD
+  registryRef:
+    name: production-registry
+
+  dataFormat: PROTOBUF
+
+  schemaDefinition: |
+    syntax = "proto3";
+
+    package com.example.orders;
+
+    message OrderEvent {
+      // Unique order identifier
+      string order_id = 1;
+
+      // Event type enumeration
+      enum EventType {
+        UNKNOWN = 0;
+        CREATED = 1;
+        UPDATED = 2;
+        SHIPPED = 3;
+        DELIVERED = 4;
+        CANCELLED = 5;
+      }
+      EventType event_type = 2;
+
+      // Timestamp in Unix epoch milliseconds
+      int64 timestamp = 3;
+
+      // Order details
+      OrderDetails order_details = 4;
+
+      // Optional metadata
+      map<string, string> metadata = 5;
+    }
+
+    message OrderDetails {
+      string customer_id = 1;
+      repeated OrderItem items = 2;
+      double total_amount = 3;
+      string currency = 4;
+      Address shipping_address = 5;
+    }
+
+    message OrderItem {
+      string product_id = 1;
+      int32 quantity = 2;
+      double unit_price = 3;
+    }
+
+    message Address {
+      string street = 1;
+      string city = 2;
+      string state = 3;
+      string postal_code = 4;
+      string country = 5;
+    }
+
+  description: "Protobuf schema for order processing events"
+
+  # BACKWARD_TRANSITIVE ensures compatibility with all previous versions
+  compatibility: BACKWARD_TRANSITIVE
+
+  # Delete schema when CRD is deleted
+  deletionPolicy: Delete
+
+  tags:
+    Environment: production
+    DataFormat: Protobuf
+    Service: orders
+    CriticalData: "true"

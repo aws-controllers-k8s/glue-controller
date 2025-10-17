@@ -1,0 +1,207 @@
+---
+# Example: Multi-Registry Setup
+# Demonstrates organizing schemas across multiple registries
+# Useful for separating environments, teams, or data domains
+
+# Development Registry - Less strict compatibility for rapid iteration
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Registry
+metadata:
+  name: development-registry
+  namespace: default
+  labels:
+    environment: development
+spec:
+  registryName: development-schema-registry
+  description: "Schema registry for development and testing - allows NONE compatibility"
+  deletionPolicy: Delete
+  tags:
+    Environment: development
+    Purpose: rapid-iteration
+    Team: engineering
+
+---
+# Staging Registry - Moderate compatibility for validation
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Registry
+metadata:
+  name: staging-registry
+  namespace: default
+  labels:
+    environment: staging
+spec:
+  registryName: staging-schema-registry
+  description: "Schema registry for staging - enforces BACKWARD compatibility"
+  deletionPolicy: Retain
+  tags:
+    Environment: staging
+    Purpose: pre-production-validation
+    Team: engineering
+
+---
+# Production Registry - Strict compatibility for data safety
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Registry
+metadata:
+  name: production-registry
+  namespace: default
+  labels:
+    environment: production
+spec:
+  registryName: production-schema-registry
+  description: "Schema registry for production - enforces FULL_TRANSITIVE compatibility"
+  deletionPolicy: Retain
+  tags:
+    Environment: production
+    Purpose: production-data
+    Team: platform
+    CriticalService: "true"
+
+---
+# Analytics Registry - Separate domain for analytics events
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Registry
+metadata:
+  name: analytics-registry
+  namespace: default
+  labels:
+    environment: production
+    domain: analytics
+spec:
+  registryName: analytics-schema-registry
+  description: "Schema registry for analytics and metrics data"
+  deletionPolicy: Retain
+  tags:
+    Environment: production
+    Purpose: analytics
+    Team: data-engineering
+    DataDomain: analytics
+
+---
+# Schema in Development Registry - No compatibility checks
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: dev-experiment-schema
+  namespace: default
+  labels:
+    environment: development
+spec:
+  schemaName: experimental-events
+  registryRef:
+    name: development-registry
+  dataFormat: AVRO
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "ExperimentalEvent",
+      "fields": [
+        {"name": "id", "type": "string"},
+        {"name": "data", "type": "string"}
+      ]
+    }
+  description: "Experimental schema for rapid development"
+  compatibility: NONE
+  deletionPolicy: Delete
+  tags:
+    Environment: development
+
+---
+# Schema in Production Registry - Strict compatibility
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: prod-transaction-schema
+  namespace: default
+  labels:
+    environment: production
+spec:
+  schemaName: transaction-events
+  registryRef:
+    name: production-registry
+  dataFormat: AVRO
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "TransactionEvent",
+      "namespace": "com.example.transactions",
+      "fields": [
+        {"name": "transactionId", "type": "string"},
+        {"name": "userId", "type": "string"},
+        {"name": "amount", "type": "double"},
+        {"name": "currency", "type": "string"},
+        {"name": "timestamp", "type": "long"}
+      ]
+    }
+  description: "Production transaction events with strict compatibility"
+  compatibility: FULL_TRANSITIVE
+  deletionPolicy: Retain
+  tags:
+    Environment: production
+    CriticalData: "true"
+
+---
+# Schema in Analytics Registry - Domain-specific
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: analytics-pageview-schema
+  namespace: default
+  labels:
+    environment: production
+    domain: analytics
+spec:
+  schemaName: pageview-events
+  registryRef:
+    name: analytics-registry
+  dataFormat: JSON
+  schemaDefinition: |
+    {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PageviewEvent",
+      "type": "object",
+      "required": ["sessionId", "pageUrl", "timestamp"],
+      "properties": {
+        "sessionId": {"type": "string"},
+        "userId": {"type": ["string", "null"]},
+        "pageUrl": {"type": "string"},
+        "referrer": {"type": ["string", "null"]},
+        "timestamp": {"type": "string", "format": "date-time"},
+        "userAgent": {"type": "string"},
+        "ipAddress": {"type": "string"}
+      }
+    }
+  description: "Analytics pageview events"
+  compatibility: FORWARD
+  deletionPolicy: Retain
+  tags:
+    Environment: production
+    DataDomain: analytics
+
+---
+# Multi-Registry Best Practices:
+#
+# 1. Environment Separation:
+#    - Development: NONE or BACKWARD for rapid iteration
+#    - Staging: BACKWARD or FULL for validation
+#    - Production: FULL_TRANSITIVE for safety
+#
+# 2. Domain Separation:
+#    - Separate registries for different data domains (analytics, transactions, events)
+#    - Easier access control and organization
+#    - Independent compatibility rules per domain
+#
+# 3. Team Separation:
+#    - Different registries for different teams
+#    - Clear ownership and responsibility
+#    - Reduced risk of cross-team conflicts
+#
+# 4. Deletion Policies:
+#    - Development: Delete (resources are ephemeral)
+#    - Staging: Retain (for debugging)
+#    - Production: Retain (never lose schemas)
+#
+# 5. Naming Conventions:
+#    - Use consistent naming: {environment}-{purpose}-registry
+#    - Tag resources appropriately for filtering
+#    - Use labels for organization

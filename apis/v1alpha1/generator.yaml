@@ -1,35 +1,35 @@
 ignore:
   resource_names:
-      - Blueprint
-      - Catalog
-      - Classifier
-      - Connection
-      - Crawler
-      - CustomEntityType
-      - DataQualityRuleset
-      - Database
-      - DevEndpoint
-      - Integration
-      - IntegrationResourceProperty
-      # - Job
-      - MLTransform
-      - Partition
-      - PartitionIndex
-      - Registry
-      - Schema
-      - Script
-      - SecurityConfiguration
-      - Session
-      - Table
-      - TableOptimizer
-      - Trigger
-      - UsageProfile
-      - UserDefinedFunction
-      - Workflow
+    - Blueprint
+    - Catalog
+    - Classifier
+    - Connection
+    - Crawler
+    - CustomEntityType
+    - DataQualityRuleset
+    - Database
+    - DevEndpoint
+    - Integration
+    - IntegrationResourceProperty
+    # - Job
+    - MLTransform
+    - Partition
+    - PartitionIndex
+    # - Registry  # ENABLED: Glue Schema Registry support (FEAT-a7f2c8d9)
+    # - Schema    # ENABLED: Glue Schema support (FEAT-a7f2c8d9)
+    - Script
+    - SecurityConfiguration
+    - Session
+    - Table
+    - TableOptimizer
+    - Trigger
+    - UsageProfile
+    - UserDefinedFunction
+    - Workflow
   field_paths:
-      - Mapping.Children
-      - CreateJobInput.AllocatedCapacity
-      - UpdateJobInput.JobUpdate.AllocatedCapacity
+    - Mapping.Children
+    - CreateJobInput.AllocatedCapacity
+    - UpdateJobInput.JobUpdate.AllocatedCapacity
 resources:
   Job:
     renames:
@@ -70,7 +70,55 @@ resources:
       terminal_codes:
         - InvalidInputException
       errors:
-        404: 
-         code: EntityNotFoundException
+        404:
+          code: EntityNotFoundException
 
-      
+  Registry:
+    renames:
+      operations:
+        GetRegistry:
+          input_fields:
+            RegistryId.RegistryName: RegistryName
+        UpdateRegistry:
+          input_fields:
+            RegistryId.RegistryName: RegistryName
+        DeleteRegistry:
+          input_fields:
+            RegistryId.RegistryName: RegistryName
+    fields:
+      Tags:
+        type: map[string]*string
+    exceptions:
+      terminal_codes:
+        - InvalidInputException
+        - AccessDeniedException
+      errors:
+        404:
+          code: EntityNotFoundException
+
+  Schema:
+    renames:
+      operations:
+        GetSchemaByDefinition:
+          input_fields:
+            SchemaId.SchemaName: SchemaName
+        RegisterSchemaVersion:
+          input_fields:
+            SchemaId.SchemaName: SchemaName
+        UpdateSchema:
+          input_fields:
+            SchemaId.SchemaName: SchemaName
+        DeleteSchema:
+          input_fields:
+            SchemaId.SchemaName: SchemaName
+    fields:
+      Tags:
+        type: map[string]*string
+    exceptions:
+      terminal_codes:
+        - InvalidInputException
+        - AccessDeniedException
+        - IncompatibleSchemaException
+      errors:
+        404:
+          code: EntityNotFoundException

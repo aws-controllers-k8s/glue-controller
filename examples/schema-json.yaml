@@ -1,0 +1,51 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: product-schema
+spec:
+  schemaName: product-schema
+  dataFormat: JSON
+  compatibility: FORWARD
+  description: "Product catalog schema using JSON Schema"
+  schemaDefinition: |
+    {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Product identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Product name"
+        },
+        "description": {
+          "type": "string",
+          "description": "Product description"
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Product price"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["electronics", "clothing", "food", "books"],
+          "description": "Product category"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Product tags"
+        },
+        "in_stock": {
+          "type": "boolean",
+          "description": "Whether product is in stock"
+        }
+      },
+      "required": ["id", "name", "price", "category"]
+    }

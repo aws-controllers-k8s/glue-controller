@@ -1,0 +1,230 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.2
+  name: registries.glue.services.k8s.aws
+spec:
+  group: glue.services.k8s.aws
+  names:
+    kind: Registry
+    listKind: RegistryList
+    plural: registries
+    singular: registry
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.registryARN
+      name: ARN
+      type: string
+    - jsonPath: .spec.compatibility
+      name: COMPATIBILITY
+      type: string
+    - jsonPath: .status.dependentSchemaCount
+      name: SCHEMAS
+      type: integer
+    - jsonPath: .status.conditions[?(@.type=="ACK.ResourceSynced")].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Registry is the Schema for the Registries API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              RegistrySpec defines the desired state of Registry.
+
+              Represents an AWS Glue Schema Registry for managing schema versions
+              with compatibility rules.
+            properties:
+              compatibility:
+                description: |-
+                  The compatibility mode for schema evolution in this registry.
+                  Valid values are:
+                    - NONE: No compatibility mode applies. You can use this choice in development
+                      scenarios or if you do not know the compatibility mode that you want to apply.
+                      Any new version added will be accepted without undergoing a compatibility check.
+                    - DISABLED: This compatibility choice prevents versioning for a particular schema.
+                      You can use this choice to prevent future versioning of a schema.
+                    - BACKWARD: This compatibility choice is recommended as it allows data receivers
+                      to read both current and previous schema versions. This means that, for instance,
+                      a new schema version cannot drop data fields.
+                    - BACKWARD_ALL: This compatibility choice allows data receivers to read data written
+                      by producers of all previous schema versions. Data receivers must be able to read
+                      data written by producers of all previous schema versions. This means that a new
+                      schema version cannot drop data fields.
+                    - FORWARD: This compatibility choice allows data receivers to read data written by
+                      producers of future schema versions. Data receivers must be able to read data written
+                      by producers of all future schema versions. This means that a new schema version cannot
+                      add data fields that were not present in a previous schema version.
+                    - FORWARD_ALL: This compatibility choice allows data receivers to read data written by
+                      producers of all future schema versions. Data receivers must be able to read data written
+                      by producers of all future schema versions. This means that a new schema version cannot
+                      add data fields that were not present in a previous schema version.
+                    - FULL: This compatibility choice allows data receivers to read both current and previous
+                      schema versions, and allows data receivers to read data written by producers of future
+                      schema versions. This means that a new schema version can neither drop data fields nor add
+                      data fields that were not present in a previous schema version.
+                    - FULL_ALL: This compatibility choice allows data receivers to read data written by producers
+                      of all previous and future schema versions. This means that a new schema version can neither
+                      drop data fields nor add data fields that were not present in a previous schema version.
+                enum:
+                - NONE
+                - DISABLED
+                - BACKWARD
+                - FORWARD
+                - FULL
+                - BACKWARD_ALL
+                - FORWARD_ALL
+                - FULL_ALL
+                type: string
+              deletionPolicy:
+                default: Delete
+                description: |-
+                  Determines whether the AWS resource is deleted when the Registry CRD is deleted.
+                  Valid values are:
+                    - Delete: The AWS Glue Registry will be deleted when the CRD is deleted
+                    - Retain: The AWS Glue Registry will be retained when the CRD is deleted
+                enum:
+                - Delete
+                - Retain
+                type: string
+              description:
+                description: |-
+                  A description of the registry. If description is not provided, there will
+                  not be any default value for this string.
+                maxLength: 2048
+                type: string
+              registryName:
+                description: |-
+                  The name of the registry. This is a unique identifier for the registry
+                  in AWS Glue.
+                maxLength: 255
+                minLength: 1
+                type: string
+              tags:
+                description: AWS tags to apply to the registry resource.
+                items:
+                  description: A key-value pair for a tag.
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+            required:
+            - registryName
+            type: object
+          status:
+            description: RegistryStatus defines the observed state of Registry
+            properties:
+              ackResourceMetadata:
+                description: |-
+                  All CRs managed by ACK have a common `Status.ACKResourceMetadata` member
+                  that is used to contain resource sync state, account ownership,
+                  constructed ARN for the resource
+                properties:
+                  arn:
+                    description: |-
+                      ARN is the Amazon Resource Name for the resource. This is a
+                      globally-unique identifier and is set only by the ACK service controller
+                      once the controller has orchestrated the creation of the resource OR
+                      when it has verified that an "adopted" resource (a resource where
+                      the ARN annotation was set by the Kubernetes user on the CR) exists and
+                      matches the supplied CR's Spec field values.
+                      https://github.com/aws/aws-controllers-k8s/issues/270
+                    type: string
+                  ownerAccountID:
+                    description: |-
+                      OwnerAccountID is the AWS Account ID of the account that owns the
+                      backend AWS service API resource.
+                    type: string
+                  region:
+                    description: Region is the AWS region in which the resource exists
+                      or will exist.
+                    type: string
+                required:
+                - ownerAccountID
+                - region
+                type: object
+              compatibility:
+                description: |-
+                  The current compatibility mode setting for the registry.
+                  This reflects the actual state in AWS and may differ from spec.compatibility
+                  if an update is in progress or if there was an error applying the change.
+                type: string
+              conditions:
+                description: |-
+                  All CRs managed by ACK have a common `Status.Conditions` member that
+                  contains a collection of `ackv1alpha1.Condition` objects that describe
+                  the various terminal states of the CR and its backend AWS service API
+                  resource
+                items:
+                  description: |-
+                    Condition is the common struct used by all CRDs managed by ACK service
+                    controllers to indicate terminal states  of the CR and its backend AWS
+                    service API resource
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the Condition
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              dependentSchemaCount:
+                description: |-
+                  The number of schemas that are currently using this registry.
+                  This count is used to enforce referential integrity - a registry with
+                  dependent schemas cannot be deleted until the schemas are removed or
+                  reassigned to a different registry.
+                format: int64
+                type: integer
+              registryARN:
+                description: The Amazon Resource Name (ARN) of the registry.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

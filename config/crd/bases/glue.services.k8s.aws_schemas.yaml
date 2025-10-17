@@ -1,0 +1,261 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.2
+  name: schemas.glue.services.k8s.aws
+spec:
+  group: glue.services.k8s.aws
+  names:
+    kind: Schema
+    listKind: SchemaList
+    plural: schemas
+    singular: schema
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.schemaARN
+      name: ARN
+      type: string
+    - jsonPath: .status.latestVersion.versionNumber
+      name: VERSION
+      type: integer
+    - jsonPath: .spec.dataFormat
+      name: FORMAT
+      type: string
+    - jsonPath: .spec.registryRef.name
+      name: REGISTRY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=="ACK.ResourceSynced")].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Schema is the Schema for the Schemas API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              SchemaSpec defines the desired state of Schema.
+
+              Represents an AWS Glue Schema with embedded version management.
+              Schema versions are automatically managed by AWS Glue when the
+              schema definition is updated.
+            properties:
+              compatibility:
+                description: |-
+                  The compatibility mode for schema evolution.
+                  If specified, this overrides the compatibility mode set at the registry level.
+                  Valid values are the same as Registry.Spec.Compatibility.
+                enum:
+                - NONE
+                - DISABLED
+                - BACKWARD
+                - FORWARD
+                - FULL
+                - BACKWARD_ALL
+                - FORWARD_ALL
+                - FULL_ALL
+                type: string
+              dataFormat:
+                description: |-
+                  The data format of the schema definition.
+                  Valid values are:
+                    - AVRO: Apache Avro schema format
+                    - JSON: JSON Schema format
+                    - PROTOBUF: Protocol Buffers schema format
+                enum:
+                - AVRO
+                - JSON
+                - PROTOBUF
+                type: string
+              deletionPolicy:
+                default: Delete
+                description: |-
+                  Determines whether the AWS resource is deleted when the Schema CRD is deleted.
+                  Valid values are:
+                    - Delete: The AWS Glue Schema will be deleted when the CRD is deleted
+                    - Retain: The AWS Glue Schema will be retained when the CRD is deleted
+                enum:
+                - Delete
+                - Retain
+                type: string
+              description:
+                description: |-
+                  A description of the schema. If description is not provided, there will
+                  not be any default value for this string.
+                maxLength: 2048
+                type: string
+              registryRef:
+                description: |-
+                  Reference to a Registry CRD in the same namespace.
+                  If not specified, the schema will be created in the default AWS Glue registry.
+                properties:
+                  name:
+                    description: |-
+                      Name of the Registry CRD in the same namespace as this Schema.
+                      The referenced Registry must exist before the Schema can be created.
+                    type: string
+                required:
+                - name
+                type: object
+              schemaDefinition:
+                description: |-
+                  The schema definition in the format specified by dataFormat.
+                  When this field is updated, a new schema version will be created
+                  in AWS Glue (subject to compatibility validation).
+                type: string
+              schemaName:
+                description: |-
+                  The name of the schema. This is a unique identifier for the schema
+                  within its registry.
+                maxLength: 255
+                minLength: 1
+                type: string
+              tags:
+                description: AWS tags to apply to the schema resource.
+                items:
+                  description: A key-value pair for a tag.
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  type: object
+                type: array
+            required:
+            - dataFormat
+            - schemaDefinition
+            - schemaName
+            type: object
+          status:
+            description: SchemaStatus defines the observed state of Schema
+            properties:
+              ackResourceMetadata:
+                description: |-
+                  All CRs managed by ACK have a common `Status.ACKResourceMetadata` member
+                  that is used to contain resource sync state, account ownership,
+                  constructed ARN for the resource
+                properties:
+                  arn:
+                    description: |-
+                      ARN is the Amazon Resource Name for the resource. This is a
+                      globally-unique identifier and is set only by the ACK service controller
+                      once the controller has orchestrated the creation of the resource OR
+                      when it has verified that an "adopted" resource (a resource where
+                      the ARN annotation was set by the Kubernetes user on the CR) exists and
+                      matches the supplied CR's Spec field values.
+                      https://github.com/aws/aws-controllers-k8s/issues/270
+                    type: string
+                  ownerAccountID:
+                    description: |-
+                      OwnerAccountID is the AWS Account ID of the account that owns the
+                      backend AWS service API resource.
+                    type: string
+                  region:
+                    description: Region is the AWS region in which the resource exists
+                      or will exist.
+                    type: string
+                  required:
+                  - ownerAccountID
+                  - region
+                  type: object
+              conditions:
+                description: |-
+                  All CRs managed by ACK have a common `Status.Conditions` member that
+                  contains a collection of `ackv1alpha1.Condition` objects that describe
+                  the various terminal states of the CR and its backend AWS service API
+                  resource
+                items:
+                  description: |-
+                    Condition is the common struct used by all CRDs managed by ACK service
+                    controllers to indicate terminal states  of the CR and its backend AWS
+                    service API resource
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the Condition
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              latestVersion:
+                description: |-
+                  Metadata about the latest version of the schema.
+                  This is updated whenever a new version is created in AWS Glue.
+                properties:
+                  createdTime:
+                    description: The timestamp when this version was created in AWS
+                      Glue.
+                    format: date-time
+                    type: string
+                  schemaVersionID:
+                    description: The unique identifier assigned by AWS Glue to this
+                      schema version.
+                    type: string
+                  status:
+                    description: |-
+                      The status of this schema version.
+                      Valid values are:
+                        - AVAILABLE: The version is ready for use
+                        - PENDING: The version is being created
+                        - DELETING: The version is being deleted
+                    type: string
+                  versionNumber:
+                    description: |-
+                      The version number auto-assigned by AWS Glue.
+                      Versions start at 1 and increment with each compatible schema update.
+                    format: int64
+                    type: integer
+                type: object
+              registryARN:
+                description: |-
+                  The ARN of the registry this schema belongs to.
+                  This is resolved from RegistryRef (if specified) or is the default registry ARN.
+                type: string
+              schemaARN:
+                description: The Amazon Resource Name (ARN) of the schema.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

@@ -1,0 +1,185 @@
+---
+# Example: Schema Evolution Demonstration
+# Shows how to evolve schemas while maintaining compatibility
+
+# Initial Schema Version (v1)
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: customer-profile-v1
+  namespace: default
+  labels:
+    version: v1
+    evolution-example: "true"
+spec:
+  schemaName: customer-profile
+
+  registryRef:
+    name: development-registry
+
+  dataFormat: AVRO
+
+  # Initial schema with basic fields
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "CustomerProfile",
+      "namespace": "com.example.customer",
+      "doc": "Customer profile schema version 1",
+      "fields": [
+        {
+          "name": "customerId",
+          "type": "string",
+          "doc": "Unique customer identifier"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "doc": "Customer email address"
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "doc": "Customer first name"
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "doc": "Customer last name"
+        },
+        {
+          "name": "createdAt",
+          "type": "long",
+          "doc": "Account creation timestamp"
+        }
+      ]
+    }
+
+  description: "Customer profile schema - initial version"
+
+  # BACKWARD allows adding new fields with defaults
+  compatibility: BACKWARD
+
+  deletionPolicy: Retain
+
+  tags:
+    SchemaVersion: v1
+    Evolution: initial
+
+---
+# Evolved Schema Version (v2)
+# This demonstrates how to add new optional fields while maintaining BACKWARD compatibility
+
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: customer-profile-v2
+  namespace: default
+  labels:
+    version: v2
+    evolution-example: "true"
+spec:
+  schemaName: customer-profile
+
+  registryRef:
+    name: development-registry
+
+  dataFormat: AVRO
+
+  # Evolved schema with additional optional fields (has defaults)
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "CustomerProfile",
+      "namespace": "com.example.customer",
+      "doc": "Customer profile schema version 2 - added phone and preferences",
+      "fields": [
+        {
+          "name": "customerId",
+          "type": "string",
+          "doc": "Unique customer identifier"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "doc": "Customer email address"
+        },
+        {
+          "name": "firstName",
+          "type": "string",
+          "doc": "Customer first name"
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "doc": "Customer last name"
+        },
+        {
+          "name": "createdAt",
+          "type": "long",
+          "doc": "Account creation timestamp"
+        },
+        {
+          "name": "phoneNumber",
+          "type": ["null", "string"],
+          "default": null,
+          "doc": "Optional phone number - NEW in v2"
+        },
+        {
+          "name": "preferences",
+          "type": ["null", {
+            "type": "record",
+            "name": "CustomerPreferences",
+            "fields": [
+              {"name": "emailNotifications", "type": "boolean", "default": true},
+              {"name": "smsNotifications", "type": "boolean", "default": false},
+              {"name": "language", "type": "string", "default": "en"}
+            ]
+          }],
+          "default": null,
+          "doc": "Customer notification preferences - NEW in v2"
+        }
+      ]
+    }
+
+  description: "Customer profile schema - v2 with phone and preferences"
+
+  # BACKWARD compatibility ensures old consumers can read new data
+  compatibility: BACKWARD
+
+  deletionPolicy: Retain
+
+  tags:
+    SchemaVersion: v2
+    Evolution: enhanced
+
+---
+# Schema Evolution Notes:
+#
+# BACKWARD Compatibility:
+# - New consumers can read old data
+# - Safe to add optional fields with defaults
+# - Safe to delete fields (not recommended)
+#
+# FORWARD Compatibility:
+# - Old consumers can read new data
+# - Safe to add new optional fields
+# - Cannot delete fields
+#
+# FULL Compatibility:
+# - Both BACKWARD and FORWARD
+# - Most restrictive but safest
+#
+# BACKWARD_TRANSITIVE:
+# - BACKWARD compatible with all previous versions
+# - Not just the immediately previous version
+#
+# FORWARD_TRANSITIVE:
+# - FORWARD compatible with all previous versions
+#
+# FULL_TRANSITIVE:
+# - Both BACKWARD_TRANSITIVE and FORWARD_TRANSITIVE
+#
+# NONE:
+# - No compatibility checks
+# - Use with caution in development only

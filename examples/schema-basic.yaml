@@ -1,0 +1,21 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: user-schema
+spec:
+  schemaName: user-schema
+  dataFormat: AVRO
+  compatibility: BACKWARD
+  description: "Basic user schema example"
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "User",
+      "namespace": "com.example",
+      "fields": [
+        {"name": "id", "type": "string", "doc": "Unique user identifier"},
+        {"name": "email", "type": "string", "doc": "User email address"},
+        {"name": "name", "type": "string", "doc": "User full name"},
+        {"name": "created_at", "type": "long", "doc": "Creation timestamp in milliseconds"}
+      ]
+    }

@@ -1,0 +1,65 @@
+---
+# Registry with Schema Compatibility Settings
+# Creates a registry with strict backward compatibility enforcement
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Registry
+metadata:
+  name: production-registry
+  namespace: default
+spec:
+  registryName: production-schemas
+  description: "Production schema registry with backward compatibility"
+
+  # Compatibility mode for all schemas in this registry (unless overridden)
+  # Options: NONE, DISABLED, BACKWARD, FORWARD, FULL, BACKWARD_ALL, FORWARD_ALL, FULL_ALL
+  compatibility: BACKWARD
+
+  # Retain the registry even if CRD is deleted (for production safety)
+  deletionPolicy: Retain
+
+  tags:
+    Environment: production
+    Team: platform
+    Compliance: required
+    CostCenter: engineering
+---
+# Example Schema using the registry
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: user-events-schema
+  namespace: default
+spec:
+  schemaName: user-events
+
+  # Reference to the Registry CRD
+  registryRef:
+    name: production-registry
+
+  # Data format: AVRO, JSON, or PROTOBUF
+  dataFormat: AVRO
+
+  # Schema definition
+  schemaDefinition: |
+    {
+      "type": "record",
+      "name": "UserEvent",
+      "namespace": "com.example.events",
+      "fields": [
+        {"name": "userId", "type": "string"},
+        {"name": "eventType", "type": "string"},
+        {"name": "timestamp", "type": "long"},
+        {"name": "metadata", "type": ["null", "string"], "default": null}
+      ]
+    }
+
+  description: "Schema for user event tracking"
+
+  # Optional: Override registry-level compatibility for this schema
+  compatibility: BACKWARD
+
+  deletionPolicy: Retain
+
+  tags:
+    Domain: analytics
+    DataClassification: internal

@@ -1,0 +1,69 @@
+---
+# Example: JSON Schema for product catalog events
+# Demonstrates JSON data format with compatibility and validation
+
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: product-catalog-json
+  namespace: default
+  labels:
+    app: catalog-service
+    format: json
+spec:
+  schemaName: product-catalog-events
+
+  # Reference to the Registry CRD
+  registryRef:
+    name: production-registry
+
+  dataFormat: JSON
+
+  schemaDefinition: |
+    {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ProductCatalogEvent",
+      "type": "object",
+      "required": ["productId", "eventType", "timestamp"],
+      "properties": {
+        "productId": {
+          "type": "string",
+          "pattern": "^PROD-[0-9]{6}$"
+        },
+        "eventType": {
+          "type": "string",
+          "enum": ["created", "updated", "deleted", "price_changed"]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "productData": {
+          "type": "object",
+          "properties": {
+            "name": {"type": "string"},
+            "category": {"type": "string"},
+            "price": {"type": "number", "minimum": 0},
+            "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        }
+      }
+    }
+
+  description: "JSON schema for product catalog events with validation"
+
+  # FORWARD compatibility allows adding new optional fields
+  compatibility: FORWARD
+
+  # Retain schema even after CRD deletion
+  deletionPolicy: Retain
+
+  tags:
+    Environment: production
+    DataFormat: JSON
+    Service: catalog
+    Owner: platform-team

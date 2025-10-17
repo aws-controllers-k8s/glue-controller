@@ -1,0 +1,25 @@
+---
+# Basic Registry Example
+# Creates a simple AWS Glue Schema Registry with default settings
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Registry
+metadata:
+  name: my-basic-registry
+  namespace: default
+spec:
+  # Name of the registry in AWS Glue
+  registryName: my-basic-registry
+
+  # Optional: Description of the registry
+  description: "Basic schema registry for development"
+
+  # Optional: Deletion policy (Delete or Retain)
+  # Delete: AWS resource will be deleted when CRD is deleted (default)
+  # Retain: AWS resource will be kept when CRD is deleted
+  deletionPolicy: Delete
+
+  # Optional: Tags to apply to the registry
+  tags:
+    Environment: development
+    Team: data-engineering
+    ManagedBy: kubernetes

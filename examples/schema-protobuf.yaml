@@ -1,0 +1,46 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Schema
+metadata:
+  name: event-schema
+spec:
+  schemaName: event-schema
+  dataFormat: PROTOBUF
+  compatibility: FULL
+  description: "Event streaming schema using Protocol Buffers"
+  schemaDefinition: |
+    syntax = "proto3";
+    package events;
+
+    // Event message for stream processing
+    message Event {
+      // Unique event identifier
+      string id = 1;
+
+      // Event type discriminator
+      string type = 2;
+
+      // Event timestamp in Unix milliseconds
+      int64 timestamp = 3;
+
+      // Event source system
+      string source = 4;
+
+      // Serialized event payload
+      bytes payload = 5;
+
+      // Event metadata
+      map<string, string> metadata = 6;
+
+      // Event severity level
+      Severity severity = 7;
+    }
+
+    // Severity enumeration
+    enum Severity {
+      UNKNOWN = 0;
+      DEBUG = 1;
+      INFO = 2;
+      WARN = 3;
+      ERROR = 4;
+      FATAL = 5;
+    }
