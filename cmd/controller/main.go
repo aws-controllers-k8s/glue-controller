@@ -40,6 +40,7 @@ import (
 	svctypes "github.com/aws-controllers-k8s/glue-controller/apis/v1alpha1"
 	svcresource "github.com/aws-controllers-k8s/glue-controller/pkg/resource"
 
+	_ "github.com/aws-controllers-k8s/glue-controller/pkg/resource/database"
 	_ "github.com/aws-controllers-k8s/glue-controller/pkg/resource/job"
 
 	"github.com/aws-controllers-k8s/glue-controller/pkg/version"

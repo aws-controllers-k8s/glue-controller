@@ -7,7 +7,7 @@ ignore:
       - Crawler
       - CustomEntityType
       - DataQualityRuleset
-      - Database
+      # - Database
       - DevEndpoint
       - Integration
       - IntegrationResourceProperty
@@ -26,10 +26,18 @@ ignore:
       - UsageProfile
       - UserDefinedFunction
       - Workflow
+  shape_names:
+      - Column
+      - KeySchemaElement
   field_paths:
       - Mapping.Children
       - CreateJobInput.AllocatedCapacity
       - UpdateJobInput.JobUpdate.AllocatedCapacity
+      - CreateDatabaseInput.DatabaseInput
+      - UpdateDatabaseInput.DatabaseInput
+operations:
+  GetDatabase:
+    output_wrapper_field_path: Database
 resources:
   Job:
     renames:
@@ -66,6 +74,54 @@ resources:
         template_path: hooks/job/sdk_read_one_post_set_output.go.tpl
       sdk_file_end:
         template_path: hooks/job/sdk_file_end.go.tpl
+    exceptions:
+      terminal_codes:
+        - InvalidInputException
+      errors:
+        404: 
+         code: EntityNotFoundException
+  Database:
+    fields:
+      Name:
+        is_primary_key: true
+        from:
+          operation: GetDatabase
+          path: Database.Name
+      Description:
+        from:
+          operation: GetDatabase
+          path: Database.Description
+      LocationURI:
+        from:
+          operation: GetDatabase
+          path: Database.LocationUri
+      Parameters:
+        from:
+          operation: GetDatabase
+          path: Database.Parameters
+      TableDefaultPermissions:
+        from:
+          operation: GetDatabase
+          path: Database.CreateTableDefaultPermissions
+      FederatedDatabase:
+        from:
+          operation: GetDatabase
+          path: Database.FederatedDatabase
+      Tags:
+        type: map[string]*string
+    hooks:
+      sdk_create_post_build_request:
+        template_path: hooks/database/sdk_create_post_build_request.go.tpl
+      sdk_create_post_set_output:
+        template_path: hooks/database/sdk_create_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/database/sdk_update_pre_build_request.go.tpl
+      sdk_update_post_build_request:
+        template_path: hooks/database/sdk_update_post_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/database/sdk_read_one_post_set_output.go.tpl
+      sdk_file_end:
+        template_path: hooks/database/sdk_file_end.go.tpl
     exceptions:
       terminal_codes:
         - InvalidInputException
