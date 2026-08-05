@@ -1,5 +1,2 @@
-    databaseInput, err := rm.buildDatabaseInput(desired)
-    if err != nil {
-        return nil, err
-    }
-    input.DatabaseInput = databaseInput
+    input.CatalogId = desired.ko.Spec.CatalogID
+    input.Name = desired.ko.Spec.Name

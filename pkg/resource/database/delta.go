@@ -107,6 +107,31 @@ func newResourceDelta(
 	if !ackcompare.MapStringStringEqual(desiredACKTags, latestACKTags) {
 		delta.Add("Spec.Tags", a.ko.Spec.Tags, b.ko.Spec.Tags)
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.TargetDatabase, b.ko.Spec.TargetDatabase) {
+		delta.Add("Spec.TargetDatabase", a.ko.Spec.TargetDatabase, b.ko.Spec.TargetDatabase)
+	} else if a.ko.Spec.TargetDatabase != nil && b.ko.Spec.TargetDatabase != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.TargetDatabase.CatalogID, b.ko.Spec.TargetDatabase.CatalogID) {
+			delta.Add("Spec.TargetDatabase.CatalogID", a.ko.Spec.TargetDatabase.CatalogID, b.ko.Spec.TargetDatabase.CatalogID)
+		} else if a.ko.Spec.TargetDatabase.CatalogID != nil && b.ko.Spec.TargetDatabase.CatalogID != nil {
+			if *a.ko.Spec.TargetDatabase.CatalogID != *b.ko.Spec.TargetDatabase.CatalogID {
+				delta.Add("Spec.TargetDatabase.CatalogID", a.ko.Spec.TargetDatabase.CatalogID, b.ko.Spec.TargetDatabase.CatalogID)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.TargetDatabase.DatabaseName, b.ko.Spec.TargetDatabase.DatabaseName) {
+			delta.Add("Spec.TargetDatabase.DatabaseName", a.ko.Spec.TargetDatabase.DatabaseName, b.ko.Spec.TargetDatabase.DatabaseName)
+		} else if a.ko.Spec.TargetDatabase.DatabaseName != nil && b.ko.Spec.TargetDatabase.DatabaseName != nil {
+			if *a.ko.Spec.TargetDatabase.DatabaseName != *b.ko.Spec.TargetDatabase.DatabaseName {
+				delta.Add("Spec.TargetDatabase.DatabaseName", a.ko.Spec.TargetDatabase.DatabaseName, b.ko.Spec.TargetDatabase.DatabaseName)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.TargetDatabase.Region, b.ko.Spec.TargetDatabase.Region) {
+			delta.Add("Spec.TargetDatabase.Region", a.ko.Spec.TargetDatabase.Region, b.ko.Spec.TargetDatabase.Region)
+		} else if a.ko.Spec.TargetDatabase.Region != nil && b.ko.Spec.TargetDatabase.Region != nil {
+			if *a.ko.Spec.TargetDatabase.Region != *b.ko.Spec.TargetDatabase.Region {
+				delta.Add("Spec.TargetDatabase.Region", a.ko.Spec.TargetDatabase.Region, b.ko.Spec.TargetDatabase.Region)
+			}
+		}
+	}
 
 	return delta
 }

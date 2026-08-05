@@ -79,11 +79,16 @@ spec:
 
                   Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
                 type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
               parameters:
                 additionalProperties:
                   type: string
-                description: These key-value pairs define parameters and properties
-                  of the database.
+                description: |-
+                  These key-value pairs define parameters and properties of the database.
+
+                  These key-value pairs define parameters and properties of the database.
                 type: object
               tableDefaultPermissions:
                 description: |-
@@ -107,6 +112,19 @@ spec:
               tags:
                 additionalProperties:
                   type: string
+                description: The tags you assign to the database.
+                type: object
+              targetDatabase:
+                description: |-
+                  A DatabaseIdentifier structure that describes a target database for resource
+                  linking.
+                properties:
+                  catalogID:
+                    type: string
+                  databaseName:
+                    type: string
+                  region:
+                    type: string
                 type: object
             type: object
           status:

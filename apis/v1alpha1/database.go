@@ -46,13 +46,20 @@ type DatabaseSpec struct {
 	// when it is stored.
 	//
 	// Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
 	Name *string `json:"name,omitempty"`
+	// These key-value pairs define parameters and properties of the database.
+	//
 	// These key-value pairs define parameters and properties of the database.
 	Parameters map[string]*string `json:"parameters,omitempty"`
 	// Creates a set of default permissions on the table for principals. Used by
 	// Lake Formation. Not used in the normal course of Glue operations.
 	TableDefaultPermissions []*PrincipalPermissions `json:"tableDefaultPermissions,omitempty"`
-	Tags                    map[string]*string      `json:"tags,omitempty"`
+	// The tags you assign to the database.
+	Tags map[string]*string `json:"tags,omitempty"`
+	// A DatabaseIdentifier structure that describes a target database for resource
+	// linking.
+	TargetDatabase *DatabaseIdentifier `json:"targetDatabase,omitempty"`
 }
 
 // DatabaseStatus defines the observed state of Database
