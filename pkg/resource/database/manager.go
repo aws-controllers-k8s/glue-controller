@@ -50,7 +50,7 @@ var (
 // +kubebuilder:rbac:groups=glue.services.k8s.aws,resources=databases,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=glue.services.k8s.aws,resources=databases/status,verbs=get;update;patch
 
-var lateInitializeFieldNames = []string{"CatalogID"}
+var lateInitializeFieldNames = []string{"CatalogID", "TableDefaultPermissions"}
 
 // resourceManager is responsible for providing a consistent way to perform
 // CRUD operations in a backend AWS service API for Book custom resources.
@@ -264,6 +264,9 @@ func (rm *resourceManager) lateInitializeFromReadOneOutput(
 	latestKo := rm.concreteResource(latest).ko.DeepCopy()
 	if observedKo.Spec.CatalogID != nil && latestKo.Spec.CatalogID == nil {
 		latestKo.Spec.CatalogID = observedKo.Spec.CatalogID
+	}
+	if observedKo.Spec.TableDefaultPermissions != nil && latestKo.Spec.TableDefaultPermissions == nil {
+		latestKo.Spec.TableDefaultPermissions = observedKo.Spec.TableDefaultPermissions
 	}
 	return &resource{latestKo}
 }

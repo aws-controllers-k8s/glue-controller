@@ -227,6 +227,9 @@ func (rm *resourceManager) sdkCreate(
 		return nil, err
 	}
 	input.CatalogId = desired.ko.Spec.CatalogID
+	if desired.ko.Spec.Tags != nil {
+		input.Tags = aws.ToStringMap(desired.ko.Spec.Tags)
+	}
 
 	var resp *svcsdk.CreateDatabaseOutput
 	_ = resp

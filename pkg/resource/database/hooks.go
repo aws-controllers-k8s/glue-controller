@@ -40,9 +40,6 @@ func (rm *resourceManager) syncTags(
 
 // databaseARN returns the ARN of the Glue database with the given name.
 func databaseARN(database *svcapitypes.Database) string {
-	// TODO(a-hilaly): I know there could be other partitions, but I'm
-	// not sure how to determine at this level of abstraction. Probably
-	// something the SDK/runtime should handle. For now, we'll just use
-	// the `aws` partition.
-	return fmt.Sprintf("arn:aws:glue:%s:%s:database/%s", *database.Status.ACKResourceMetadata.Region, *database.Status.ACKResourceMetadata.OwnerAccountID, *database.Spec.Name)
+	md := database.Status.ACKResourceMetadata
+	return fmt.Sprintf("arn:%s:glue:%s:%s:database/%s", *md.Partition, *md.Region, *md.OwnerAccountID, *database.Spec.Name)
 }

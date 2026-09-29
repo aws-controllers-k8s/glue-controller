@@ -103,6 +103,9 @@ resources:
         from:
           operation: CreateDatabase
           path: CatalogId
+      TableDefaultPermissions:
+        late_initialize:
+          skip_incomplete_check: {}
       Tags:
         from:
           operation: CreateDatabase
