@@ -18,6 +18,7 @@ rules:
   resources:
   - databases
   - jobs
+  - tables
   verbs:
   - create
   - delete
@@ -31,6 +32,7 @@ rules:
   resources:
   - databases
   - jobs
+  - tables
   verbs:
   - get
   - patch
