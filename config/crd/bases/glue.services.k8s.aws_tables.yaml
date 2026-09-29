@@ -1,0 +1,370 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.19.0
+  name: tables.glue.services.k8s.aws
+spec:
+  group: glue.services.k8s.aws
+  names:
+    kind: Table
+    listKind: TableList
+    plural: tables
+    singular: table
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Table is the Schema for the Tables API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: |-
+              TableSpec defines the desired state of Table.
+
+              The database and table in the Glue Data Catalog that is used for input or
+              output data.
+            properties:
+              catalogID:
+                description: |-
+                  The ID of the Data Catalog in which to create the Table. If none is supplied,
+                  the Amazon Web Services account ID is used by default.
+
+                  Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
+              databaseName:
+                description: |-
+                  The catalog database in which to create the new table. For Hive compatibility,
+                  this name is entirely lowercase.
+
+                  Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
+              databaseRef:
+                description: "AWSResourceReferenceWrapper provides a wrapper around
+                  *AWSResourceReference\ntype to provide more user friendly syntax
+                  for references using 'from' field\nEx:\nAPIIDRef:\n\n\tfrom:\n\t
+                  \ name: my-api"
+                properties:
+                  from:
+                    description: |-
+                      AWSResourceReference provides all the values necessary to reference another
+                      k8s resource for finding the identifier(Id/ARN/Name)
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    type: object
+                type: object
+              description:
+                description: |-
+                  A description of the table.
+
+                  Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\r\n\t]*$`
+                type: string
+              name:
+                description: |-
+                  The table name. For Hive compatibility, this is folded to lowercase when
+                  it is stored.
+
+                  Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
+                type: string
+                x-kubernetes-validations:
+                - message: Value is immutable once set
+                  rule: self == oldSelf
+              owner:
+                description: |-
+                  The table owner. Included for Apache Hive compatibility. Not used in the
+                  normal course of Glue operations.
+
+                  Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
+                type: string
+              parameters:
+                additionalProperties:
+                  type: string
+                description: These key-value pairs define properties associated with
+                  the table.
+                type: object
+              partitionKeys:
+                description: |-
+                  A list of columns by which the table is partitioned. Only primitive types
+                  are supported as partition keys.
+
+                  When you create a table used by Amazon Athena, and you do not specify any
+                  partitionKeys, you must at least set the value of partitionKeys to an empty
+                  list. For example:
+
+                  "PartitionKeys": []
+                items:
+                  description: A column in a Table.
+                  properties:
+                    comment:
+                      type: string
+                    name:
+                      type: string
+                    parameters:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    type:
+                      type: string
+                  type: object
+                type: array
+              retention:
+                description: The retention time for this table.
+                format: int64
+                type: integer
+              storageDescriptor:
+                description: |-
+                  A storage descriptor containing information about the physical storage of
+                  this table.
+                properties:
+                  additionalLocations:
+                    items:
+                      type: string
+                    type: array
+                  bucketColumns:
+                    items:
+                      type: string
+                    type: array
+                  columns:
+                    items:
+                      description: A column in a Table.
+                      properties:
+                        comment:
+                          type: string
+                        name:
+                          type: string
+                        parameters:
+                          additionalProperties:
+                            type: string
+                          type: object
+                        type:
+                          type: string
+                      type: object
+                    type: array
+                  compressed:
+                    type: boolean
+                  inputFormat:
+                    type: string
+                  location:
+                    type: string
+                  numberOfBuckets:
+                    format: int64
+                    type: integer
+                  outputFormat:
+                    type: string
+                  parameters:
+                    additionalProperties:
+                      type: string
+                    type: object
+                  schemaReference:
+                    description: An object that references a schema stored in the
+                      Glue Schema Registry.
+                    properties:
+                      schemaID:
+                        description: The unique ID of the schema in the Glue schema
+                          registry.
+                        properties:
+                          registryName:
+                            type: string
+                          schemaARN:
+                            type: string
+                          schemaName:
+                            type: string
+                        type: object
+                      schemaVersionID:
+                        type: string
+                      schemaVersionNumber:
+                        format: int64
+                        type: integer
+                    type: object
+                  serdeInfo:
+                    description: |-
+                      Information about a serialization/deserialization program (SerDe) that serves
+                      as an extractor and loader.
+                    properties:
+                      name:
+                        type: string
+                      parameters:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      serializationLibrary:
+                        type: string
+                    type: object
+                  skewedInfo:
+                    description: |-
+                      Specifies skewed values in a table. Skewed values are those that occur with
+                      very high frequency.
+                    properties:
+                      skewedColumnNames:
+                        items:
+                          type: string
+                        type: array
+                      skewedColumnValueLocationMaps:
+                        additionalProperties:
+                          type: string
+                        type: object
+                      skewedColumnValues:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  sortColumns:
+                    items:
+                      description: Specifies the sort order of a sorted column.
+                      properties:
+                        column:
+                          type: string
+                        sortOrder:
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  storedAsSubDirectories:
+                    type: boolean
+                type: object
+              tableType:
+                description: |-
+                  The type of this table. Glue will create tables with the EXTERNAL_TABLE type.
+                  Other services, such as Athena, may create tables with additional table types.
+
+                  Glue related table types:
+
+                  EXTERNAL_TABLE
+
+                  Hive compatible attribute - indicates a non-Hive managed table.
+
+                  GOVERNED
+
+                  Used by Lake Formation. The Glue Data Catalog understands GOVERNED.
+                type: string
+              targetTable:
+                description: A TableIdentifier structure that describes a target table
+                  for resource linking.
+                properties:
+                  catalogID:
+                    type: string
+                  databaseName:
+                    type: string
+                  name:
+                    type: string
+                  region:
+                    type: string
+                type: object
+              viewExpandedText:
+                description: |-
+                  Included for Apache Hive compatibility. Not used in the normal course of
+                  Glue operations.
+                type: string
+              viewOriginalText:
+                description: |-
+                  Included for Apache Hive compatibility. Not used in the normal course of
+                  Glue operations. If the table is a VIRTUAL_VIEW, certain Athena configuration
+                  encoded in base64.
+                type: string
+            required:
+            - name
+            type: object
+          status:
+            description: TableStatus defines the observed state of Table
+            properties:
+              ackResourceMetadata:
+                description: |-
+                  All CRs managed by ACK have a common `Status.ACKResourceMetadata` member
+                  that is used to contain resource sync state, account ownership,
+                  constructed ARN for the resource
+                properties:
+                  arn:
+                    description: |-
+                      ARN is the Amazon Resource Name for the resource. This is a
+                      globally-unique identifier and is set only by the ACK service controller
+                      once the controller has orchestrated the creation of the resource OR
+                      when it has verified that an "adopted" resource (a resource where the
+                      ARN annotation was set by the Kubernetes user on the CR) exists and
+                      matches the supplied CR's Spec field values.
+                      https://github.com/aws/aws-controllers-k8s/issues/270
+                    type: string
+                  ownerAccountID:
+                    description: |-
+                      OwnerAccountID is the AWS Account ID of the account that owns the
+                      backend AWS service API resource.
+                    type: string
+                  partition:
+                    description: Partition is the AWS partition in which the resource
+                      exists or will exist
+                    type: string
+                  region:
+                    description: Region is the AWS region in which the resource exists
+                      or will exist.
+                    type: string
+                required:
+                - ownerAccountID
+                - region
+                type: object
+              conditions:
+                description: |-
+                  All CRs managed by ACK have a common `Status.Conditions` member that
+                  contains a collection of `ackv1alpha1.Condition` objects that describe
+                  the various terminal states of the CR and its backend AWS service API
+                  resource
+                items:
+                  description: |-
+                    Condition is the common struct used by all CRDs managed by ACK service
+                    controllers to indicate terminal states  of the CR and its backend AWS
+                    service API resource
+                  properties:
+                    lastTransitionTime:
+                      description: Last time the condition transitioned from one status
+                        to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A human readable message indicating details about
+                        the transition.
+                      type: string
+                    reason:
+                      description: The reason for the condition's last transition.
+                      type: string
+                    status:
+                      description: Status of the condition, one of True, False, Unknown.
+                      type: string
+                    type:
+                      description: Type is the type of the Condition
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

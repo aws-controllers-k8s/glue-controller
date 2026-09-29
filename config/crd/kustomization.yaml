@@ -4,3 +4,4 @@ resources:
   - common
   - bases/glue.services.k8s.aws_databases.yaml
   - bases/glue.services.k8s.aws_jobs.yaml
+  - bases/glue.services.k8s.aws_tables.yaml

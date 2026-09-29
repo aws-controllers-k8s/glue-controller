@@ -20,19 +20,25 @@ ignore:
       - Script
       - SecurityConfiguration
       - Session
-      - Table
+      # - Table
       - TableOptimizer
       - Trigger
       - UsageProfile
       - UserDefinedFunction
       - Workflow
   shape_names:
-      - Column
       - KeySchemaElement
   field_paths:
       - Mapping.Children
       - CreateJobInput.AllocatedCapacity
       - UpdateJobInput.JobUpdate.AllocatedCapacity
+      - CreateTableInput.OpenTableFormatInput
+      - CreateTableInput.PartitionIndexes
+      - CreateTableInput.TransactionId
+      - TableData.Status
+      - TableInput.LastAccessTime
+      - TableInput.LastAnalyzedTime
+      - TableInput.ViewDefinition
 operations:
   CreateDatabase:
     input_wrapper_field_path: DatabaseInput
@@ -40,6 +46,12 @@ operations:
     input_wrapper_field_path: DatabaseInput
   GetDatabase:
     output_wrapper_field_path: Database
+  CreateTable:
+    input_wrapper_field_path: TableInput
+  UpdateTable:
+    input_wrapper_field_path: TableInput
+  GetTable:
+    output_wrapper_field_path: Table
 resources:
   Job:
     renames:
@@ -128,5 +140,57 @@ resources:
       errors:
         404: 
          code: EntityNotFoundException
-
-      
+  Table:
+    fields:
+      Name:
+        is_required: true
+        is_immutable: true
+      DatabaseName:
+        is_required: true
+        is_immutable: true
+        from:
+          operation: CreateTable
+          path: DatabaseName
+        references:
+          resource: Database
+          path: Spec.Name
+      CatalogId:
+        is_immutable: true
+        late_initialize:
+          skip_incomplete_check: {}
+        from:
+          operation: CreateTable
+          path: CatalogId
+      Retention:
+        compare:
+          nil_equals_zero_value: true
+      PartitionKeys.Type:
+        go_tag: json:"type,omitempty"
+      StorageDescriptor.Columns.Type:
+        go_tag: json:"type,omitempty"
+      StorageDescriptor.Compressed:
+        compare:
+          nil_equals_zero_value: true
+      StorageDescriptor.NumberOfBuckets:
+        compare:
+          nil_equals_zero_value: true
+      StorageDescriptor.StoredAsSubDirectories:
+        compare:
+          nil_equals_zero_value: true
+    tags:
+      ignore: true
+    hooks:
+      sdk_create_post_build_request:
+        template_path: hooks/table/sdk_create_post_build_request.go.tpl
+      sdk_create_post_set_output:
+        template_path: hooks/table/sdk_create_post_set_output.go.tpl
+      sdk_update_post_build_request:
+        template_path: hooks/table/sdk_update_post_build_request.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/table/sdk_read_one_post_set_output.go.tpl
+    exceptions:
+      terminal_codes:
+        - InvalidInputException
+      errors:
+        404:
+          code: EntityNotFoundException

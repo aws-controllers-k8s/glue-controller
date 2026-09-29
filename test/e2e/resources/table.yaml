@@ -1,0 +1,30 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Table
+metadata:
+  name: $TABLE_NAME
+spec:
+  name: $TABLE_NAME
+  databaseRef:
+    from:
+      name: $DATABASE_NAME
+  description: $TABLE_DESCRIPTION
+  tableType: EXTERNAL_TABLE
+  parameters:
+    classification: csv
+  partitionKeys:
+    - name: dt
+      type: string
+  storageDescriptor:
+    location: s3://ack-glue-e2e/$TABLE_NAME/
+    inputFormat: org.apache.hadoop.mapred.TextInputFormat
+    outputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+    serdeInfo:
+      serializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+      parameters:
+        field.delim: ","
+    columns:
+      - name: id
+        type: string
+        comment: unique identifier
+      - name: value
+        type: bigint
