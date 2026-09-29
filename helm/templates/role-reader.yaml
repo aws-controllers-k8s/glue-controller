@@ -18,6 +18,7 @@ rules:
   resources:
   - databases
   - jobs
+  - tables
   verbs:
   - get
   - list
