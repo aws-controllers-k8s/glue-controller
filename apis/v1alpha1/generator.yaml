@@ -97,6 +97,7 @@ resources:
     fields:
       Name:
         is_immutable: true
+        is_required: true
       CatalogId:
         late_initialize:
           skip_incomplete_check: {}

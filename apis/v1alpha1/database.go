@@ -47,7 +47,8 @@ type DatabaseSpec struct {
 	//
 	// Regex Pattern: `^[\u0020-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF\t]*$`
 	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable once set"
-	Name *string `json:"name,omitempty"`
+	// +kubebuilder:validation:Required
+	Name *string `json:"name"`
 	// These key-value pairs define parameters and properties of the database.
 	//
 	// These key-value pairs define parameters and properties of the database.
