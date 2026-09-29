@@ -1,0 +1,9 @@
+apiVersion: glue.services.k8s.aws/v1alpha1
+kind: Database
+metadata:
+  name: $DATABASE_NAME
+spec:
+  name: $DATABASE_NAME
+  description: $DATABASE_DESCRIPTION
+  tags:
+    key: val

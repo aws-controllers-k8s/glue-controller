@@ -149,6 +149,17 @@ type BasicCatalogTarget struct {
 	Table         *string     `json:"table,omitempty"`
 }
 
+// Represents a table optimizer to retrieve in the BatchGetTableOptimizer operation.
+type BatchGetTableOptimizerEntry struct {
+	CatalogID *string `json:"catalogID,omitempty"`
+}
+
+// Contains details on one of the errors in the error list returned by the BatchGetTableOptimizer
+// operation.
+type BatchGetTableOptimizerError struct {
+	CatalogID *string `json:"catalogID,omitempty"`
+}
+
 // Records an error that occurred when attempting to stop a specified job run.
 type BatchStopJobRunError struct {
 	JobName *string `json:"jobName,omitempty"`
@@ -157,6 +168,12 @@ type BatchStopJobRunError struct {
 // Records a successful request to stop a specified JobRun.
 type BatchStopJobRunSuccessfulSubmission struct {
 	JobName *string `json:"jobName,omitempty"`
+}
+
+// Contains details for one of the table optimizers returned by the BatchGetTableOptimizer
+// operation.
+type BatchTableOptimizer struct {
+	CatalogID *string `json:"catalogID,omitempty"`
 }
 
 // The details of a blueprint.
@@ -201,7 +218,8 @@ type CatalogHudiSource struct {
 
 // A structure containing migration status information.
 type CatalogImportStatus struct {
-	ImportedBy *string `json:"importedBy,omitempty"`
+	ImportTime *metav1.Time `json:"importTime,omitempty"`
+	ImportedBy *string      `json:"importedBy,omitempty"`
 }
 
 // Specifies an Apache Kafka data store in the Data Catalog.
@@ -422,12 +440,6 @@ type CodeGenConfigurationNode struct {
 	Union *Union `json:"union,omitempty"`
 }
 
-// A column in a Table.
-type Column struct {
-	Name *string `json:"name,omitempty"`
-	Type *string `json:"type_,omitempty"`
-}
-
 // Encapsulates a column name that failed and the reason for failure.
 type ColumnError struct {
 	ColumnName *string `json:"columnName,omitempty"`
@@ -449,13 +461,24 @@ type ColumnRowFilter struct {
 
 // Represents the generated column-level statistics for a table or partition.
 type ColumnStatistics struct {
-	ColumnName *string `json:"columnName,omitempty"`
+	AnalyzedTime *metav1.Time `json:"analyzedTime,omitempty"`
+	ColumnName   *string      `json:"columnName,omitempty"`
 }
 
 // The object that shows the details of the column stats run.
 type ColumnStatisticsTaskRun struct {
-	ErrorMessage *string `json:"errorMessage,omitempty"`
-	WorkerType   *string `json:"workerType,omitempty"`
+	CatalogID    *string      `json:"catalogID,omitempty"`
+	CreationTime *metav1.Time `json:"creationTime,omitempty"`
+	EndTime      *metav1.Time `json:"endTime,omitempty"`
+	ErrorMessage *string      `json:"errorMessage,omitempty"`
+	LastUpdated  *metav1.Time `json:"lastUpdated,omitempty"`
+	StartTime    *metav1.Time `json:"startTime,omitempty"`
+	WorkerType   *string      `json:"workerType,omitempty"`
+}
+
+// The settings for a column statistics task.
+type ColumnStatisticsTaskSettings struct {
+	CatalogID *string `json:"catalogID,omitempty"`
 }
 
 // Defines a condition under which a trigger fires.
@@ -473,9 +496,12 @@ type ConditionExpression struct {
 
 // Defines a connection to a data source.
 type Connection struct {
-	Description   *string `json:"description,omitempty"`
-	LastUpdatedBy *string `json:"lastUpdatedBy,omitempty"`
-	Name          *string `json:"name,omitempty"`
+	CreationTime                 *metav1.Time `json:"creationTime,omitempty"`
+	Description                  *string      `json:"description,omitempty"`
+	LastConnectionValidationTime *metav1.Time `json:"lastConnectionValidationTime,omitempty"`
+	LastUpdatedBy                *string      `json:"lastUpdatedBy,omitempty"`
+	LastUpdatedTime              *metav1.Time `json:"lastUpdatedTime,omitempty"`
+	Name                         *string      `json:"name,omitempty"`
 }
 
 // A structure that is used to specify a connection to create or update.
@@ -533,14 +559,18 @@ type Crawl struct {
 // to try to determine its schema. If successful, the crawler records metadata
 // concerning the data source in the Glue Data Catalog.
 type Crawler struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	CreationTime *metav1.Time `json:"creationTime,omitempty"`
+	Description  *string      `json:"description,omitempty"`
+	LastUpdated  *metav1.Time `json:"lastUpdated,omitempty"`
+	Name         *string      `json:"name,omitempty"`
 }
 
 // Contains the information for a run of a crawler.
 type CrawlerHistory struct {
-	ErrorMessage *string `json:"errorMessage,omitempty"`
-	Summary      *string `json:"summary,omitempty"`
+	EndTime      *metav1.Time `json:"endTime,omitempty"`
+	ErrorMessage *string      `json:"errorMessage,omitempty"`
+	StartTime    *metav1.Time `json:"startTime,omitempty"`
+	Summary      *string      `json:"summary,omitempty"`
 }
 
 // Metrics for a specified crawler.
@@ -579,10 +609,12 @@ type CreateXMLClassifierRequest struct {
 
 // A classifier for custom CSV content.
 type CsvClassifier struct {
-	AllowSingleColumn        *bool   `json:"allowSingleColumn,omitempty"`
-	CustomDatatypeConfigured *bool   `json:"customDatatypeConfigured,omitempty"`
-	DisableValueTrimming     *bool   `json:"disableValueTrimming,omitempty"`
-	Name                     *string `json:"name,omitempty"`
+	AllowSingleColumn        *bool        `json:"allowSingleColumn,omitempty"`
+	CreationTime             *metav1.Time `json:"creationTime,omitempty"`
+	CustomDatatypeConfigured *bool        `json:"customDatatypeConfigured,omitempty"`
+	DisableValueTrimming     *bool        `json:"disableValueTrimming,omitempty"`
+	LastUpdated              *metav1.Time `json:"lastUpdated,omitempty"`
+	Name                     *string      `json:"name,omitempty"`
 }
 
 // Specifies a transform that uses custom code you provide to perform the data
@@ -616,6 +648,11 @@ type DQStopJobOnFailureOptions struct {
 	StopJobOnFailureTiming *string `json:"stopJobOnFailureTiming,omitempty"`
 }
 
+// The Lake Formation principal.
+type DataLakePrincipal struct {
+	DataLakePrincipalIdentifier *string `json:"dataLakePrincipalIdentifier,omitempty"`
+}
+
 // Describes the result of the evaluation of a data quality analyzer.
 type DataQualityAnalyzerResult struct {
 	Name *string `json:"name,omitempty"`
@@ -638,19 +675,35 @@ type DataQualityMetricValues struct {
 
 // Describes a data quality result.
 type DataQualityResult struct {
-	EvaluationContext *string `json:"evaluationContext,omitempty"`
-	JobName           *string `json:"jobName,omitempty"`
-	RulesetName       *string `json:"rulesetName,omitempty"`
+	CompletedOn       *metav1.Time `json:"completedOn,omitempty"`
+	EvaluationContext *string      `json:"evaluationContext,omitempty"`
+	JobName           *string      `json:"jobName,omitempty"`
+	RulesetName       *string      `json:"rulesetName,omitempty"`
+	StartedOn         *metav1.Time `json:"startedOn,omitempty"`
 }
 
 // Describes a data quality result.
 type DataQualityResultDescription struct {
-	JobName *string `json:"jobName,omitempty"`
+	JobName   *string      `json:"jobName,omitempty"`
+	StartedOn *metav1.Time `json:"startedOn,omitempty"`
 }
 
 // Criteria used to return data quality results.
 type DataQualityResultFilterCriteria struct {
-	JobName *string `json:"jobName,omitempty"`
+	JobName       *string      `json:"jobName,omitempty"`
+	StartedAfter  *metav1.Time `json:"startedAfter,omitempty"`
+	StartedBefore *metav1.Time `json:"startedBefore,omitempty"`
+}
+
+// Describes the result of a data quality rule recommendation run.
+type DataQualityRuleRecommendationRunDescription struct {
+	StartedOn *metav1.Time `json:"startedOn,omitempty"`
+}
+
+// A filter for listing data quality recommendation runs.
+type DataQualityRuleRecommendationRunFilter struct {
+	StartedAfter  *metav1.Time `json:"startedAfter,omitempty"`
+	StartedBefore *metav1.Time `json:"startedBefore,omitempty"`
 }
 
 // Describes the result of the evaluation of a data quality rule.
@@ -658,17 +711,34 @@ type DataQualityRuleResult struct {
 	Name *string `json:"name,omitempty"`
 }
 
+// Describes the result of a data quality ruleset evaluation run.
+type DataQualityRulesetEvaluationRunDescription struct {
+	StartedOn *metav1.Time `json:"startedOn,omitempty"`
+}
+
+// The filter criteria.
+type DataQualityRulesetEvaluationRunFilter struct {
+	StartedAfter  *metav1.Time `json:"startedAfter,omitempty"`
+	StartedBefore *metav1.Time `json:"startedBefore,omitempty"`
+}
+
 // The criteria used to filter data quality rulesets.
 type DataQualityRulesetFilterCriteria struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	CreatedAfter       *metav1.Time `json:"createdAfter,omitempty"`
+	CreatedBefore      *metav1.Time `json:"createdBefore,omitempty"`
+	Description        *string      `json:"description,omitempty"`
+	LastModifiedAfter  *metav1.Time `json:"lastModifiedAfter,omitempty"`
+	LastModifiedBefore *metav1.Time `json:"lastModifiedBefore,omitempty"`
+	Name               *string      `json:"name,omitempty"`
 }
 
 // Describes a data quality ruleset returned by GetDataQualityRuleset.
 type DataQualityRulesetListDetails struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
-	RuleCount   *int64  `json:"ruleCount,omitempty"`
+	CreatedOn      *metav1.Time `json:"createdOn,omitempty"`
+	Description    *string      `json:"description,omitempty"`
+	LastModifiedOn *metav1.Time `json:"lastModifiedOn,omitempty"`
+	Name           *string      `json:"name,omitempty"`
+	RuleCount      *int64       `json:"ruleCount,omitempty"`
 }
 
 // An object representing an Glue table.
@@ -678,29 +748,52 @@ type DataQualityTargetTable struct {
 	TableName    *string `json:"tableName,omitempty"`
 }
 
-// The Database object represents a logical grouping of tables that might reside
-// in a Hive metastore or an RDBMS.
-type Database struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
-}
-
 // A structure that describes a target database for resource linking.
 type DatabaseIdentifier struct {
+	CatalogID    *string `json:"catalogID,omitempty"`
 	DatabaseName *string `json:"databaseName,omitempty"`
 	Region       *string `json:"region,omitempty"`
 }
 
 // The structure used to create or update a database.
 type DatabaseInput struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	CreateTableDefaultPermissions []*PrincipalPermissions `json:"createTableDefaultPermissions,omitempty"`
+	Description                   *string                 `json:"description,omitempty"`
+	// A database that points to an entity outside the Glue Data Catalog.
+	FederatedDatabase *FederatedDatabase `json:"federatedDatabase,omitempty"`
+	LocationURI       *string            `json:"locationURI,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	Parameters        map[string]*string `json:"parameters,omitempty"`
+	// A structure that describes a target database for resource linking.
+	TargetDatabase *DatabaseIdentifier `json:"targetDatabase,omitempty"`
+}
+
+// The Database object represents a logical grouping of tables that might reside
+// in a Hive metastore or an RDBMS.
+type Database_SDK struct {
+	CatalogID                     *string                 `json:"catalogID,omitempty"`
+	CreateTableDefaultPermissions []*PrincipalPermissions `json:"createTableDefaultPermissions,omitempty"`
+	CreateTime                    *metav1.Time            `json:"createTime,omitempty"`
+	Description                   *string                 `json:"description,omitempty"`
+	// A database that points to an entity outside the Glue Data Catalog.
+	FederatedDatabase *FederatedDatabase `json:"federatedDatabase,omitempty"`
+	LocationURI       *string            `json:"locationURI,omitempty"`
+	Name              *string            `json:"name,omitempty"`
+	Parameters        map[string]*string `json:"parameters,omitempty"`
+	// A structure that describes a target database for resource linking.
+	TargetDatabase *DatabaseIdentifier `json:"targetDatabase,omitempty"`
 }
 
 // A structure representing the datatype of the value.
 type Datatype struct {
 	ID    *string `json:"id,omitempty"`
 	Label *string `json:"label,omitempty"`
+}
+
+// Defines column statistics supported for timestamp data columns.
+type DateColumnStatisticsData struct {
+	MaximumValue *metav1.Time `json:"maximumValue,omitempty"`
+	MinimumValue *metav1.Time `json:"minimumValue,omitempty"`
 }
 
 // Specifies a Delta data store to crawl one or more Delta tables.
@@ -892,11 +985,14 @@ type ExportLabelsTaskRunProperties struct {
 // A database that points to an entity outside the Glue Data Catalog.
 type FederatedDatabase struct {
 	ConnectionName *string `json:"connectionName,omitempty"`
+	Identifier     *string `json:"identifier,omitempty"`
 }
 
 // A table that points to an entity outside the Glue Data Catalog.
 type FederatedTable struct {
-	ConnectionName *string `json:"connectionName,omitempty"`
+	ConnectionName     *string `json:"connectionName,omitempty"`
+	DatabaseIdentifier *string `json:"databaseIdentifier,omitempty"`
+	Identifier         *string `json:"identifier,omitempty"`
 }
 
 // Specifies a transform that locates records in the dataset that have missing
@@ -941,6 +1037,12 @@ type FindMatchesTaskRunProperties struct {
 	JobName *string `json:"jobName,omitempty"`
 }
 
+// A structure for returning a resource policy.
+type GluePolicy struct {
+	CreateTime *metav1.Time `json:"createTime,omitempty"`
+	UpdateTime *metav1.Time `json:"updateTime,omitempty"`
+}
+
 // Specifies a user-defined schema when a schema cannot be determined by Glue.
 type GlueSchema struct {
 	Columns []*GlueStudioSchemaColumn `json:"columns,omitempty"`
@@ -975,7 +1077,9 @@ type GovernedCatalogTarget struct {
 
 // A classifier that uses grok patterns.
 type GrokClassifier struct {
-	Name *string `json:"name,omitempty"`
+	CreationTime *metav1.Time `json:"creationTime,omitempty"`
+	LastUpdated  *metav1.Time `json:"lastUpdated,omitempty"`
+	Name         *string      `json:"name,omitempty"`
 }
 
 // Specifies an Apache Hudi data source.
@@ -1046,7 +1150,9 @@ type JDBCConnectorTarget struct {
 
 // A classifier for JSON content.
 type JSONClassifier struct {
-	Name *string `json:"name,omitempty"`
+	CreationTime *metav1.Time `json:"creationTime,omitempty"`
+	LastUpdated  *metav1.Time `json:"lastUpdated,omitempty"`
+	Name         *string      `json:"name,omitempty"`
 }
 
 // Defines a point that a job can resume processing.
@@ -1199,12 +1305,6 @@ type KafkaStreamingSourceOptions struct {
 	TopicName              *string      `json:"topicName,omitempty"`
 }
 
-// A partition key pair consisting of a name and a type.
-type KeySchemaElement struct {
-	Name *string `json:"name,omitempty"`
-	Type *string `json:"type_,omitempty"`
-}
-
 // Additional options for the Amazon Kinesis streaming data source.
 type KinesisStreamingSourceOptions struct {
 	AddIdleTimeBetweenReads  *bool        `json:"addIdleTimeBetweenReads,omitempty"`
@@ -1252,20 +1352,23 @@ type LastActiveDefinition struct {
 
 // Status and error information about the most recent crawl.
 type LastCrawlInfo struct {
-	ErrorMessage *string `json:"errorMessage,omitempty"`
+	ErrorMessage *string      `json:"errorMessage,omitempty"`
+	StartTime    *metav1.Time `json:"startTime,omitempty"`
 }
 
 // A structure for a machine learning transform.
 type MLTransform struct {
-	Description     *string  `json:"description,omitempty"`
-	GlueVersion     *string  `json:"glueVersion,omitempty"`
-	MaxCapacity     *float64 `json:"maxCapacity,omitempty"`
-	MaxRetries      *int64   `json:"maxRetries,omitempty"`
-	Name            *string  `json:"name,omitempty"`
-	NumberOfWorkers *int64   `json:"numberOfWorkers,omitempty"`
-	Role            *string  `json:"role,omitempty"`
-	Timeout         *int64   `json:"timeout,omitempty"`
-	WorkerType      *string  `json:"workerType,omitempty"`
+	CreatedOn       *metav1.Time `json:"createdOn,omitempty"`
+	Description     *string      `json:"description,omitempty"`
+	GlueVersion     *string      `json:"glueVersion,omitempty"`
+	LastModifiedOn  *metav1.Time `json:"lastModifiedOn,omitempty"`
+	MaxCapacity     *float64     `json:"maxCapacity,omitempty"`
+	MaxRetries      *int64       `json:"maxRetries,omitempty"`
+	Name            *string      `json:"name,omitempty"`
+	NumberOfWorkers *int64       `json:"numberOfWorkers,omitempty"`
+	Role            *string      `json:"role,omitempty"`
+	Timeout         *int64       `json:"timeout,omitempty"`
+	WorkerType      *string      `json:"workerType,omitempty"`
 }
 
 // The encryption-at-rest settings of the transform that apply to accessing
@@ -1402,8 +1505,13 @@ type PIIDetection struct {
 
 // Represents a slice of table data.
 type Partition struct {
-	DatabaseName *string `json:"databaseName,omitempty"`
-	TableName    *string `json:"tableName,omitempty"`
+	CatalogID        *string            `json:"catalogID,omitempty"`
+	CreationTime     *metav1.Time       `json:"creationTime,omitempty"`
+	DatabaseName     *string            `json:"databaseName,omitempty"`
+	LastAccessTime   *metav1.Time       `json:"lastAccessTime,omitempty"`
+	LastAnalyzedTime *metav1.Time       `json:"lastAnalyzedTime,omitempty"`
+	Parameters       map[string]*string `json:"parameters,omitempty"`
+	TableName        *string            `json:"tableName,omitempty"`
 }
 
 // A structure for a partition index.
@@ -1414,6 +1522,13 @@ type PartitionIndex struct {
 // A descriptor for a partition index in a table.
 type PartitionIndexDescriptor struct {
 	IndexName *string `json:"indexName,omitempty"`
+}
+
+// The structure used to create and update a partition.
+type PartitionInput struct {
+	LastAccessTime   *metav1.Time       `json:"lastAccessTime,omitempty"`
+	LastAnalyzedTime *metav1.Time       `json:"lastAnalyzedTime,omitempty"`
+	Parameters       map[string]*string `json:"parameters,omitempty"`
 }
 
 // The OAuth client app in GetConnection response.
@@ -1441,6 +1556,20 @@ type PostgreSQLCatalogTarget struct {
 // this job run.
 type Predecessor struct {
 	JobName *string `json:"jobName,omitempty"`
+}
+
+// Permissions granted to a principal.
+type PrincipalPermissions struct {
+	Permissions []*string `json:"permissions,omitempty"`
+	// The Lake Formation principal.
+	Principal *DataLakePrincipal `json:"principal,omitempty"`
+}
+
+// A structure used as a protocol between query engines and Lake Formation or
+// Glue. Contains both a Lake Formation generated authorization identifier and
+// information from the request's authorization context.
+type QuerySessionContext struct {
+	QueryStartTime *metav1.Time `json:"queryStartTime,omitempty"`
 }
 
 // A Glue Studio node that uses a Glue DataBrew recipe in Glue jobs.
@@ -1510,6 +1639,11 @@ type RenameField struct {
 	Name       *string   `json:"name,omitempty"`
 	SourcePath []*string `json:"sourcePath,omitempty"`
 	TargetPath []*string `json:"targetPath,omitempty"`
+}
+
+// The URIs for function resources.
+type ResourceURI struct {
+	URI *string `json:"uri,omitempty"`
 }
 
 // Specifies a Delta Lake data source that is registered in the Glue Data Catalog.
@@ -1768,8 +1902,9 @@ type SelectFromCollection struct {
 // Information about a serialization/deserialization program (SerDe) that serves
 // as an extractor and loader.
 type SerDeInfo struct {
-	Name                 *string `json:"name,omitempty"`
-	SerializationLibrary *string `json:"serializationLibrary,omitempty"`
+	Name                 *string            `json:"name,omitempty"`
+	Parameters           map[string]*string `json:"parameters,omitempty"`
+	SerializationLibrary *string            `json:"serializationLibrary,omitempty"`
 }
 
 // The period in which a remote Spark runtime environment is running.
@@ -1929,12 +2064,28 @@ type StatementOutputData struct {
 	TextPlain *string `json:"textPlain,omitempty"`
 }
 
+// A Statistic Annotation.
+type StatisticAnnotation struct {
+	StatisticRecordedOn *metav1.Time `json:"statisticRecordedOn,omitempty"`
+}
+
 // The statistic model result.
 type StatisticModelResult struct {
-	ActualValue    *float64 `json:"actualValue,omitempty"`
-	LowerBound     *float64 `json:"lowerBound,omitempty"`
-	PredictedValue *float64 `json:"predictedValue,omitempty"`
-	UpperBound     *float64 `json:"upperBound,omitempty"`
+	ActualValue    *float64     `json:"actualValue,omitempty"`
+	Date           *metav1.Time `json:"date,omitempty"`
+	LowerBound     *float64     `json:"lowerBound,omitempty"`
+	PredictedValue *float64     `json:"predictedValue,omitempty"`
+	UpperBound     *float64     `json:"upperBound,omitempty"`
+}
+
+// Summary information about a statistic.
+type StatisticSummary struct {
+	RecordedOn *metav1.Time `json:"recordedOn,omitempty"`
+}
+
+// Describes the physical storage of table data.
+type StorageDescriptor struct {
+	Parameters map[string]*string `json:"parameters,omitempty"`
 }
 
 // Specifies options related to data preview for viewing a sample of your data.
@@ -1954,12 +2105,18 @@ type Table struct {
 
 // Represents a collection of related data organized in columns and rows.
 type TableData struct {
-	CreatedBy          *string `json:"createdBy,omitempty"`
-	DatabaseName       *string `json:"databaseName,omitempty"`
-	Description        *string `json:"description,omitempty"`
-	IsMultiDialectView *bool   `json:"isMultiDialectView,omitempty"`
-	Name               *string `json:"name,omitempty"`
-	Owner              *string `json:"owner,omitempty"`
+	CatalogID          *string            `json:"catalogID,omitempty"`
+	CreateTime         *metav1.Time       `json:"createTime,omitempty"`
+	CreatedBy          *string            `json:"createdBy,omitempty"`
+	DatabaseName       *string            `json:"databaseName,omitempty"`
+	Description        *string            `json:"description,omitempty"`
+	IsMultiDialectView *bool              `json:"isMultiDialectView,omitempty"`
+	LastAccessTime     *metav1.Time       `json:"lastAccessTime,omitempty"`
+	LastAnalyzedTime   *metav1.Time       `json:"lastAnalyzedTime,omitempty"`
+	Name               *string            `json:"name,omitempty"`
+	Owner              *string            `json:"owner,omitempty"`
+	Parameters         map[string]*string `json:"parameters,omitempty"`
+	UpdateTime         *metav1.Time       `json:"updateTime,omitempty"`
 }
 
 // An error record for table operations.
@@ -1969,6 +2126,7 @@ type TableError struct {
 
 // A structure that describes a target table for resource linking.
 type TableIdentifier struct {
+	CatalogID    *string `json:"catalogID,omitempty"`
 	DatabaseName *string `json:"databaseName,omitempty"`
 	Name         *string `json:"name,omitempty"`
 	Region       *string `json:"region,omitempty"`
@@ -1976,9 +2134,12 @@ type TableIdentifier struct {
 
 // A structure used to define a table.
 type TableInput struct {
-	Description *string `json:"description,omitempty"`
-	Name        *string `json:"name,omitempty"`
-	Owner       *string `json:"owner,omitempty"`
+	Description      *string            `json:"description,omitempty"`
+	LastAccessTime   *metav1.Time       `json:"lastAccessTime,omitempty"`
+	LastAnalyzedTime *metav1.Time       `json:"lastAnalyzedTime,omitempty"`
+	Name             *string            `json:"name,omitempty"`
+	Owner            *string            `json:"owner,omitempty"`
+	Parameters       map[string]*string `json:"parameters,omitempty"`
 }
 
 // Contains details on the configuration of a table optimizer. You pass this
@@ -1990,8 +2151,10 @@ type TableOptimizerConfiguration struct {
 // A structure containing information about the state of an asynchronous change
 // to a table.
 type TableStatus struct {
-	RequestedBy *string `json:"requestedBy,omitempty"`
-	UpdatedBy   *string `json:"updatedBy,omitempty"`
+	RequestTime *metav1.Time `json:"requestTime,omitempty"`
+	RequestedBy *string      `json:"requestedBy,omitempty"`
+	UpdateTime  *metav1.Time `json:"updateTime,omitempty"`
+	UpdatedBy   *string      `json:"updatedBy,omitempty"`
 }
 
 // An error record for table-version operations.
@@ -2001,8 +2164,29 @@ type TableVersionError struct {
 
 // The sampling parameters that are associated with the machine learning transform.
 type TaskRun struct {
-	ErrorString  *string `json:"errorString,omitempty"`
-	LogGroupName *string `json:"logGroupName,omitempty"`
+	CompletedOn    *metav1.Time `json:"completedOn,omitempty"`
+	ErrorString    *string      `json:"errorString,omitempty"`
+	LastModifiedOn *metav1.Time `json:"lastModifiedOn,omitempty"`
+	LogGroupName   *string      `json:"logGroupName,omitempty"`
+	StartedOn      *metav1.Time `json:"startedOn,omitempty"`
+}
+
+// The criteria that are used to filter the task runs for the machine learning
+// transform.
+type TaskRunFilterCriteria struct {
+	StartedAfter  *metav1.Time `json:"startedAfter,omitempty"`
+	StartedBefore *metav1.Time `json:"startedBefore,omitempty"`
+}
+
+// A timestamp filter.
+type TimestampFilter struct {
+	RecordedAfter  *metav1.Time `json:"recordedAfter,omitempty"`
+	RecordedBefore *metav1.Time `json:"recordedBefore,omitempty"`
+}
+
+// A timestamped inclusion annotation.
+type TimestampedInclusionAnnotation struct {
+	LastModifiedOn *metav1.Time `json:"lastModifiedOn,omitempty"`
 }
 
 // Specifies the parameters in the config file of the dynamic transform.
@@ -2028,8 +2212,12 @@ type TransformEncryption struct {
 
 // The criteria used to filter the machine learning transforms.
 type TransformFilterCriteria struct {
-	GlueVersion *string `json:"glueVersion,omitempty"`
-	Name        *string `json:"name,omitempty"`
+	CreatedAfter       *metav1.Time `json:"createdAfter,omitempty"`
+	CreatedBefore      *metav1.Time `json:"createdBefore,omitempty"`
+	GlueVersion        *string      `json:"glueVersion,omitempty"`
+	LastModifiedAfter  *metav1.Time `json:"lastModifiedAfter,omitempty"`
+	LastModifiedBefore *metav1.Time `json:"lastModifiedBefore,omitempty"`
+	Name               *string      `json:"name,omitempty"`
 }
 
 // Information about a specific trigger.
@@ -2096,10 +2284,12 @@ type UsageProfileDefinition struct {
 
 // Represents the equivalent of a Hive user-defined function (UDF) definition.
 type UserDefinedFunction struct {
-	ClassName    *string `json:"className,omitempty"`
-	DatabaseName *string `json:"databaseName,omitempty"`
-	FunctionName *string `json:"functionName,omitempty"`
-	OwnerName    *string `json:"ownerName,omitempty"`
+	CatalogID    *string      `json:"catalogID,omitempty"`
+	ClassName    *string      `json:"className,omitempty"`
+	CreateTime   *metav1.Time `json:"createTime,omitempty"`
+	DatabaseName *string      `json:"databaseName,omitempty"`
+	FunctionName *string      `json:"functionName,omitempty"`
+	OwnerName    *string      `json:"ownerName,omitempty"`
 }
 
 // A structure used to create or update a user-defined function.
@@ -2130,6 +2320,13 @@ type ViewRepresentation struct {
 // Lake Formation view.
 type ViewRepresentationInput struct {
 	ValidationConnection *string `json:"validationConnection,omitempty"`
+}
+
+// A structure that contains information for an analytical engine to validate
+// a view, prior to persisting the view metadata. Used in the case of direct
+// UpdateTable or CreateTable API calls.
+type ViewValidation struct {
+	UpdateTime *metav1.Time `json:"updateTime,omitempty"`
 }
 
 // A workflow is a collection of multiple dependent Glue jobs and crawlers that
@@ -2164,5 +2361,7 @@ type WorkflowRunStatistics struct {
 
 // A classifier for XML content.
 type XMLClassifier struct {
-	Name *string `json:"name,omitempty"`
+	CreationTime *metav1.Time `json:"creationTime,omitempty"`
+	LastUpdated  *metav1.Time `json:"lastUpdated,omitempty"`
+	Name         *string      `json:"name,omitempty"`
 }

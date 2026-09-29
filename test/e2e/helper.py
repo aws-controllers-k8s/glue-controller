@@ -35,3 +35,20 @@ class GlueValidator:
             return response['Tags']
         except self.glue_client.exceptions.EntityNotFoundException:
             return None
+
+    def get_database(self, database_name):
+        try:
+            response = self.glue_client.get_database(Name=database_name)
+            return response['Database']
+        except self.glue_client.exceptions.EntityNotFoundException:
+            return None
+
+    def database_exists(self, database_name):
+        return self.get_database(database_name) is not None
+
+    def database_list_tags(self, database_arn):
+        try:
+            response = self.glue_client.get_tags(ResourceArn=database_arn)
+            return response['Tags']
+        except self.glue_client.exceptions.EntityNotFoundException:
+            return None
