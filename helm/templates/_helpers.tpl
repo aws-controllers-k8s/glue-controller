@@ -74,6 +74,7 @@ rules:
   resources:
   - databases
   - jobs
+  - tables
   verbs:
   - create
   - delete
@@ -87,6 +88,7 @@ rules:
   resources:
   - databases/status
   - jobs/status
+  - tables/status
   verbs:
   - get
   - patch

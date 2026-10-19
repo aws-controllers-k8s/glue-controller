@@ -52,3 +52,16 @@ class GlueValidator:
             return response['Tags']
         except self.glue_client.exceptions.EntityNotFoundException:
             return None
+
+    def get_table(self, database_name, table_name):
+        try:
+            response = self.glue_client.get_table(
+                DatabaseName=database_name,
+                Name=table_name,
+            )
+            return response['Table']
+        except self.glue_client.exceptions.EntityNotFoundException:
+            return None
+
+    def table_exists(self, database_name, table_name):
+        return self.get_table(database_name, table_name) is not None
