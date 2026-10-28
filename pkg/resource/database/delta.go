@@ -50,7 +50,9 @@ func newResourceDelta(
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.Description, b.ko.Spec.Description) {
-		delta.Add("Spec.Description", a.ko.Spec.Description, b.ko.Spec.Description)
+		if !ackcompare.IsNilEqualsZero(a.ko.Spec.Description, b.ko.Spec.Description) {
+			delta.Add("Spec.Description", a.ko.Spec.Description, b.ko.Spec.Description)
+		}
 	} else if a.ko.Spec.Description != nil && b.ko.Spec.Description != nil {
 		if *a.ko.Spec.Description != *b.ko.Spec.Description {
 			delta.Add("Spec.Description", a.ko.Spec.Description, b.ko.Spec.Description)
@@ -75,7 +77,9 @@ func newResourceDelta(
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.LocationURI, b.ko.Spec.LocationURI) {
-		delta.Add("Spec.LocationURI", a.ko.Spec.LocationURI, b.ko.Spec.LocationURI)
+		if !ackcompare.IsNilEqualsZero(a.ko.Spec.LocationURI, b.ko.Spec.LocationURI) {
+			delta.Add("Spec.LocationURI", a.ko.Spec.LocationURI, b.ko.Spec.LocationURI)
+		}
 	} else if a.ko.Spec.LocationURI != nil && b.ko.Spec.LocationURI != nil {
 		if *a.ko.Spec.LocationURI != *b.ko.Spec.LocationURI {
 			delta.Add("Spec.LocationURI", a.ko.Spec.LocationURI, b.ko.Spec.LocationURI)

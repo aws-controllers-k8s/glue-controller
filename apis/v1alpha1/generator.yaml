@@ -107,6 +107,16 @@ resources:
       TableDefaultPermissions:
         late_initialize:
           skip_incomplete_check: {}
+      # GetDatabase returns "" for both on a resource link (TargetDatabase
+      # set). Without this, nil in spec vs "" from AWS is a diff and
+      # triggers UpdateDatabase, which Lake Formation authorizes as ALTER on
+      # the target database.
+      Description:
+        compare:
+          nil_equals_zero_value: true
+      LocationUri:
+        compare:
+          nil_equals_zero_value: true
       Tags:
         from:
           operation: CreateDatabase
